@@ -1,6 +1,6 @@
 import whois
 import requests
-from src.configs import keys
+from src.configs import keys,platforms
 
 def lookup_domain(domain):
     try:
@@ -14,32 +14,114 @@ def lookup_domain(domain):
         print(f"Error: {e}")
 
 def social_media(username):
-    print(f"Searching for social media accounts with username: {username}")
-    # You can use APIs or scraping to search for social media accounts.
-    # For example, search for usernames on platforms like Twitter, Facebook, Instagram, etc.
+    print(f"Searching for social media accounts with the name: {username}")
+    for platform in platforms:
+        try:
+            # Example search URL for each platform (replace with actual API or scraping logic)
+            # Replace 'your_api_key_here' with actual keys if required.
+            url = f"https://api.socialsearch.com/search?name={username}&platform={platform}&apikey=your_api_key_here"
+            response = requests.get(url)
+
+            if response.status_code == 200:
+                results = response.json()
+                print(f"Top 6 results on {platform}:")
+                for account in results['accounts'][:6]:  # Top 6 results
+                    print(f"Name: {account['name']}, URL: {account['profile_url']}")
+            else:
+                print(f"Error on {platform}: Status code {response.status_code}")
+        except Exception as e:
+            print(f"Error occurred while searching on {platform}: {e}")
 
 def search_email(email):
-    # For this example, we will simply print the email.
-    # 
     print(f"Searching for email: {email}")
-    # hunter.io
+    
+    # Hunter.io Email Finder API
     if keys.get('hunter') == '':
-        print("[!] no hunter.io API key entered")
+        print("[!] No Hunter.io API key entered")
     else:
-        response = requests.get(f"https://api.hunter.io/v2/email-finder?email={email}&api_key={keys.get('hunter')}")
-        print(response.json())
-    # shodan
+        try:
+            response = requests.get(f"https://api.hunter.io/v2/email-finder?email={email}&api_key={keys.get('hunter')}")
+            if response.status_code == 200:
+                print("Hunter.io Results:")
+                print(response.json())
+            else:
+                print(f"Hunter.io Error: {response.status_code}")
+        except Exception as e:
+            print(f"Hunter.io error: {e}")
+
+    # Shodan API (email search in some cases requires enterprise access)
     if keys.get('shodan') == '':
-        print("[!] no shodan API key entered")
+        print("[!] No Shodan API key entered")
     else:
-        # response = requests.get(f"https://api.hunter.io/v2/email-finder?email={email}&api_key={keys.get('hunter')}")
-        print(response.json())
-    # HaveIBeenPwnd
+        try:
+            response = requests.get(f"https://api.shodan.io/shodan/host/search?query={email}&key={keys.get('shodan')}")
+            if response.status_code == 200:
+                print("Shodan Results:")
+                print(response.json())
+            else:
+                print(f"Shodan Error: {response.status_code}")
+        except Exception as e:
+            print(f"Shodan error: {e}")
+    
+    # HaveIBeenPwned (HIBP) API
     if keys.get('pwnd') == '':
-        print("[!] no HaveIBeenPwnd API key entered")
+        print("[!] No HaveIBeenPwned API key entered")
     else:
-        # response = requests.get(f"https://api.hunter.io/v2/email-finder?email={email}&api_key={keys.get('hunter')}")
-        print(response.json())
+        try:
+            headers = {
+                'hibp-api-key': keys.get('pwnd'),
+                'User-Agent': 'Your Tool'
+            }
+            response = requests.get(f"https://haveibeenpwned.com/api/v3/breachedaccount/{email}", headers=headers)
+            if response.status_code == 200:
+                print("HaveIBeenPwned Results:")
+                print(response.json())
+            else:
+                print(f"HaveIBeenPwned Error: {response.status_code}")
+        except Exception as e:
+            print(f"HaveIBeenPwned error: {e}")
+
+    # EmailRep.io API (email reputation)
+    if keys.get('emailrep') == '':
+        print("[!] No EmailRep API key entered")
+    else:
+        try:
+            response = requests.get(f"https://emailrep.io/{email}", headers={'Key': keys.get('emailrep')})
+            if response.status_code == 200:
+                print("EmailRep Results:")
+                print(response.json())
+            else:
+                print(f"EmailRep Error: {response.status_code}")
+        except Exception as e:
+            print(f"EmailRep error: {e}")
+
+    # Pipl API (deep people search, including email addresses)
+    if keys.get('pipl') == '':
+        print("[!] No Pipl API key entered")
+    else:
+        try:
+            response = requests.get(f"https://api.pipl.com/search/?email={email}&key={keys.get('pipl')}")
+            if response.status_code == 200:
+                print("Pipl Results:")
+                print(response.json())
+            else:
+                print(f"Pipl Error: {response.status_code}")
+        except Exception as e:
+            print(f"Pipl error: {e}")
+
+    # Clearbit API (email enrichment and search)
+    if keys.get('clearbit') == '':
+        print("[!] No Clearbit API key entered")
+    else:
+        try:
+            response = requests.get(f"https://person.clearbit.com/v2/combined/find?email={email}", headers={'Authorization': f"Bearer {keys.get('clearbit')}"})
+            if response.status_code == 200:
+                print("Clearbit Results:")
+                print(response.json())
+            else:
+                print(f"Clearbit Error: {response.status_code}")
+        except Exception as e:
+            print(f"Clearbit error: {e}")
 
 def lookup_ip(ip):
     try:

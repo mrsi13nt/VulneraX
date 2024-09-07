@@ -1,4 +1,4 @@
 import os
 
-def smtp(target):
+def smtp(target,p,v):
     print('')
