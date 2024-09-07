@@ -5,5 +5,5 @@ import sys
 import threading
 
 def ssh(target,port):
-    print("")
+    print("coming soon...")
     

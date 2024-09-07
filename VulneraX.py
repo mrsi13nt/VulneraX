@@ -9,6 +9,8 @@ from src.wordlist import *
 from src.configs import *
 from src.web import *
 from src.ctf import *
+from src.wifi import *
+from src.bluetooth import *
 import subprocess
 
 
@@ -38,17 +40,20 @@ def main():
     osint.add_argument('-s', action='store', dest='social', metavar='name', help='search for people')
     osint.add_argument('-e', action='store', dest='email', metavar='email', help='search for emails')
     osint.add_argument('-d', action='store', dest='domain', metavar='domain', help='search for domains')
+    wireless = parser.add_argument_group('Wireless Pentesting')
+    wireless.add_argument('-w', action='store', dest='wireless', help='make a full pentest on wireless (1 => wifi, 2 => bluetooth)')
     assessment = parser.add_argument_group('Vulnerability Assessment')
-    # assessment.add_argument('-s')
+    assessment.add_argument('-r', action='store_true', dest='assess', help='make a sorted report contains all your scanning results\nonly in web and OSINT and info gathering and wireless pentest')
     web = parser.add_argument_group('Web attacks')
     web.add_argument('-u', action='store', dest='url',metavar='url', help='enter the url you want to scan')
     web.add_argument('--xss', action='store_true', dest='xss', help='scan for XSS')
     web.add_argument('--sql', action='store_true', dest='sqli', help='scan for SQLi')
     web.add_argument('--full', action='store_true', dest='full', help='full web scanning includes (xss, sqli, api keys scanning, js leakes, and some other cool things)')
     others = parser.add_argument_group('Others')
+    others.add_argument('--config', action='store_true', help='edit your config file, set API tokens')
     others.add_argument('--ctf', action='store', dest='ctf', metavar='ip addr', help='CTF mode, you can think clear from now!')
     others.add_argument('-I', action='store_true', dest='tools', help='install top 50 tools in cybersecurity')
-    others.add_argument('-w', action='store_true', dest='wordlist', help='wordlist maker')
+    others.add_argument('-W', action='store_true', dest='wordlist', help='wordlist maker')
 
     args = parser.parse_args()
 
@@ -60,6 +65,7 @@ def main():
     # print("Network connection is available. Continuing with the program...")
 
         
+
     # port scanner
     if args.port:
         scan()
@@ -72,7 +78,6 @@ def main():
         social_media(args.social)
     if args.domain:
         lookup_domain(args.domain)
-    # Vulnerability Assessment
     # Web
     if args.xss:
         if not args.url:
@@ -95,6 +100,16 @@ def main():
     if args.url:
         print('please enter type of scanning (--xss or --sql or --full)')
         sys.exit(1)
+    # wireless
+    if args.wireless == "1" or args.wireless == 1:
+        wifi()
+    elif args.wireless == "2" or args.wireless == 2:
+        blue()
+    elif args.wireless and args.wireless != ['1',1,'2',2]:
+        print("wrong input for wireless pentest you should write for example : -w 1 \n")
+    # config 
+    if args.config:
+        conf()
     # CTF mode
     if args.ctf:
         ctf(args.ctf)

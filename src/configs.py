@@ -1,18 +1,26 @@
 import subprocess
 import requests
+import os
+import platform
+
 
 
 keys = {
-    'hunter': 'your_hunter_api_key',
-    'shodan': 'your_shodan_api_key',
-    'pwnd': 'your_haveibeenpwnd_api_key',
-    'emailrep': 'your_emailrep_api_key',
-    'pipl': 'your_pipl_api_key',
-    'clearbit': 'your_clearbit_api_key'
+    'hunter': '',
+    'shodan': '',
+    'pwnd': '',
+    'emailrep': '',
+    'pipl': '',
+    'clearbit': '',
+    'socialsearch': ''
 }
 
 
 platforms = ['Twitter', 'Facebook', 'Instagram', 'LinkedIn']
+
+
+current_user = os.getlogin()
+os_name = platform.system()
 
 
 
@@ -65,7 +73,16 @@ def update_tool():
         print(f"Error during update: {e}")
 
 
-
+# open the file
+def conf():
+    if os_name == "Windows":
+        subprocess.run('mousepad ',shell=True)
+    elif os_name == "Darwin":
+        subprocess.run('mousepad',shell=True)
+    elif os_name == "Linux":
+        subprocess.run(f'mousepad /home/{current_user}/mytools/VulneraX/src/configs.py', shell=True)
+    else:
+        print("Unknown operating system: ", os_name)
 
 
 

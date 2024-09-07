@@ -85,10 +85,9 @@ def windows():
 
 
 
-
+os_name = platform.system()
 
 def detect_os():
-    os_name = platform.system()
     
     if os_name == "Windows":
         windows()

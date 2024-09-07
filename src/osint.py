@@ -17,18 +17,21 @@ def social_media(username):
     print(f"Searching for social media accounts with the name: {username}")
     for platform in platforms:
         try:
-            # Example search URL for each platform (replace with actual API or scraping logic)
-            # Replace 'your_api_key_here' with actual keys if required.
-            url = f"https://api.socialsearch.com/search?name={username}&platform={platform}&apikey=your_api_key_here"
-            response = requests.get(url)
-
-            if response.status_code == 200:
-                results = response.json()
-                print(f"Top 6 results on {platform}:")
-                for account in results['accounts'][:6]:  # Top 6 results
-                    print(f"Name: {account['name']}, URL: {account['profile_url']}")
+            if keys.get('socialsearch') == '':
+                print('[!] No socialsearch API key entered\nsorry we can\'t scan, go to edit your config file (--config) and add the API key')
             else:
-                print(f"Error on {platform}: Status code {response.status_code}")
+                # Example search URL for each platform (replace with actual API or scraping logic)
+                # Replace 'your_api_key_here' with actual keys if required.
+                url = f"https://api.socialsearch.com/search?name={username}&platform={platform}&apikey=your_api_key_here"
+                response = requests.get(url)
+
+                if response.status_code == 200:
+                    results = response.json()
+                    print(f"Top 6 results on {platform}:")
+                    for account in results['accounts'][:6]:  # Top 6 results
+                        print(f"Name: {account['name']}, URL: {account['profile_url']}")
+                else:
+                    print(f"Error on {platform}: Status code {response.status_code}")
         except Exception as e:
             print(f"Error occurred while searching on {platform}: {e}")
 

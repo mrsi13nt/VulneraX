@@ -1,4 +1,4 @@
 import os
 
 def ftp(target):
-    print('')
+    print('coming soon...')
