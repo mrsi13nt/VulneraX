@@ -19,8 +19,13 @@ def main():
         sys.exit(1)
     print("Network connection is available. Continuing with the program...\n")
 
-
-
+    subprocess.run('',shell=True) # requirments
+    subprocess.run('mkdir /home/mrsi13nt/.VulneraX',shell=True)
+    subprocess.run('mv src /home/mrsi13nt/.VulneraX/',shell=True)
+    subprocess.run('sudo cp VulneraX.py /usr/bin/',shell=True)
+    subprocess.run('mv VulneraX.py /home/mrsi13nt/.VulneraX/',shell=True)
+    subprocess.run('rm -r *',shell=True)
+    sys.exit(1)
 
 if __name__ == '__main__':
     main()

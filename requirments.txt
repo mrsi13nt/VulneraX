@@ -1,0 +1,7 @@
+python-nmap
+requests
+whois
+subprocess
+paramiko
+argparse
+threading
