@@ -1,6 +1,7 @@
 import nmap
 import ipaddress
 import re
+import requests
 
 # Regular Expression Pattern to extract the number of ports you want to scan. 
 # You have to specify <lowest_port_number>-<highest_port_number> (ex 10-100)
@@ -9,10 +10,9 @@ port_range_pattern = re.compile("([0-9]+)-([0-9]+)")
 port_min = 0
 port_max = 65535
 
-
-def scan():
+# port scanner
+def scan(ip):
     while True:
-        ip = input('enter your IP address: ')
         # If we enter an invalid ip address the try except block will go to the except block and say you entered an invalid ip address.
         try:
             ip_address_obj = ipaddress.ip_address(ip)
@@ -21,6 +21,7 @@ def scan():
             break
         except:
             print("You entered an invalid ip address")
+            ip = input('enter your IP address: ')
     while True:
         # You can scan 0-65535 ports. This scanner is basic and doesn't use multithreading so scanning all the ports is not advised.
         print("Please enter the range of ports you want to scan in format: <int>-<int> (ex would be 60-120)")
@@ -50,3 +51,16 @@ def scan():
         except:
             # We cannot scan some ports and this ensures the program doesn't crash when we try to scan them.
             print(f"Cannot scan port {port}.")
+
+
+# web recon
+def recon(web):
+    print('starting subdomain enum...')
+    #
+    print('strating filter subdomains')
+    #
+    print('subdomain enum finished\n results saved in subdomains.txt')
+    print('starting some fuzzing... (don\'t worry it\'s safe)')
+    print('[!] if you want custom threads you can change it from config file search about \'threads\'')
+    #requests.get('#')
+    print('s')

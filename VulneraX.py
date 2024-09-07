@@ -2,7 +2,7 @@ import argparse
 import socket
 import sys
 import datetime
-from src.portscanner import *
+from src.info_gather import *
 from src.logo import *
 from src.osint import *
 from src.wordlist import *
@@ -35,6 +35,7 @@ def main():
                     usage='%(prog)s [options] arg')
     info = parser.add_argument_group('Information Gathering')
     info.add_argument('-p',action='store',metavar='ip addr', dest='port', help='port scanning only')
+    info.add_argument('-r', action='store', metavar='website', dest='recon', help='Website recon (only accept wildcard for now)')
     osint = parser.add_argument_group('OSINT')
     osint.add_argument('-ip', action='store', dest='ip', metavar='ip', help='search for ip address')
     osint.add_argument('-s', action='store', dest='social', metavar='name', help='search for people')
@@ -43,7 +44,7 @@ def main():
     wireless = parser.add_argument_group('Wireless Pentesting')
     wireless.add_argument('-w', action='store', dest='wireless', help='make a full pentest on wireless (1 => wifi, 2 => bluetooth)')
     assessment = parser.add_argument_group('Vulnerability Assessment')
-    assessment.add_argument('-r', action='store_true', dest='assess', help='make a sorted report contains all your scanning results\nonly in web and OSINT and info gathering and wireless pentest')
+    assessment.add_argument('-v', action='store_true', dest='assess', help='make a sorted report contains all your scanning results\nonly in web and OSINT and info gathering and wireless pentest')
     web = parser.add_argument_group('Web attacks')
     web.add_argument('-u', action='store', dest='url',metavar='url', help='enter the url you want to scan')
     web.add_argument('--xss', action='store_true', dest='xss', help='scan for XSS')
@@ -68,7 +69,10 @@ def main():
 
     # port scanner
     if args.port:
-        scan()
+        scan(args.port)
+    # recon
+    if args.recon:
+        recon(args.recon)
     # OSINT
     if args.ip:
         lookup_ip(args.ip)
