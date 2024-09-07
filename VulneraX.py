@@ -28,21 +28,20 @@ def check_network():
 # main file
 def main():
     # args
-    usage = 'usage: vulnerax [options] arg'
     parser = argparse.ArgumentParser(prog='VulneraX',
                     description=logo,formatter_class=argparse.RawTextHelpFormatter,
                     epilog="",
                     usage='%(prog)s [options] arg')
     info = parser.add_argument_group('Information Gathering')
-    info.add_argument('-p',action='store',metavar='ip addr', dest='port', help='port scanning only')
-    info.add_argument('-r', action='store', metavar='website', dest='recon', help='Website recon (only accept wildcard for now)')
+    info.add_argument('-p',action='store',metavar='ip addr', dest='port', help='port scanning only (like nmap)')
+    info.add_argument('-r', action='store', metavar='website', dest='recon', help='Website recon (only accept wildcard for now..)')
     osint = parser.add_argument_group('OSINT')
     osint.add_argument('-ip', action='store', dest='ip', metavar='ip', help='search for ip address')
     osint.add_argument('-s', action='store', dest='social', metavar='name', help='search for people')
     osint.add_argument('-e', action='store', dest='email', metavar='email', help='search for emails')
     osint.add_argument('-d', action='store', dest='domain', metavar='domain', help='search for domains')
     wireless = parser.add_argument_group('Wireless Pentesting')
-    wireless.add_argument('-w', action='store', dest='wireless', help='make a full pentest on wireless (1 => wifi, 2 => bluetooth)')
+    wireless.add_argument('-w', action='store',metavar='1 or 2', dest='wireless', help='make a full pentest on wireless (1 => wifi, 2 => bluetooth)')
     assessment = parser.add_argument_group('Vulnerability Assessment')
     assessment.add_argument('-v', action='store_true', dest='assess', help='make a sorted report contains all your scanning results\nonly in web and OSINT and info gathering and wireless pentest')
     web = parser.add_argument_group('Web attacks')
@@ -58,6 +57,7 @@ def main():
 
     args = parser.parse_args()
 
+    print(logo_main)
 
     # check if it online or not
     # if not check_network():
@@ -66,7 +66,6 @@ def main():
     # print("Network connection is available. Continuing with the program...")
 
         
-
     # port scanner
     if args.port:
         scan(args.port)
@@ -85,24 +84,24 @@ def main():
     # Web
     if args.xss:
         if not args.url:
-            print('please enter url to scan for XSS by entering: -u URL --xss')
+            print('[\033[31m!\033[0m] please enter url to scan for XSS by entering: -u URL --xss')
             sys.exit(1)
         else:
             xss(args.url)
     if args.sqli:
         if not args.url:
-            print('please enter url to scan for SQLi by entering: -u URL --sql')
+            print('[\033[31m!\033[0m] please enter url to scan for SQLi by entering: -u URL --sql')
             sys.exit(1)
         else:
             check_sql_injection(args.url, parameters=None)
     if args.full:
         if not args.url:
-            print('please enter url to scan for SQLi by entering: -u URL --sql')
+            print('[\033[31m!\033[0m] please enter url to scan for SQLi by entering: -u URL --sql')
             sys.exit(1)
         else:
             full(args.url)
     if args.url:
-        print('please enter type of scanning (--xss or --sql or --full)')
+        print('[\033[31m!\033[0m] please enter type of scanning (--xss or --sql or --full)')
         sys.exit(1)
     # wireless
     if args.wireless == "1" or args.wireless == 1:
@@ -110,7 +109,7 @@ def main():
     elif args.wireless == "2" or args.wireless == 2:
         blue()
     elif args.wireless and args.wireless != ['1',1,'2',2]:
-        print("wrong input for wireless pentest you should write for example : -w 1 \n")
+        print("[\033[31m!\033[0m] wrong input for wireless pentest you should write for example : -w 1 \n")
     # config 
     if args.config:
         conf()
@@ -123,7 +122,6 @@ def main():
     # wordlist maker
     if args.wordlist:
         wordlist()
-
 
 if __name__ == '__main__':
     main()

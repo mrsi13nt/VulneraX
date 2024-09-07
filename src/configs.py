@@ -2,6 +2,7 @@ import subprocess
 import requests
 import os
 import platform
+import sys
 
 
 
@@ -109,3 +110,19 @@ sql_payloads = [
     "' UNION SELECT NULL, NULL, NULL --",
     '" UNION SELECT NULL, NULL, NULL --'
 ]
+
+
+
+
+
+
+
+
+
+def ask():
+    q = input('do you want to exit? (y/n) > ')
+    if q == ['Y','y','']:
+        print('\n bye bye !')
+        sys.exit(1)
+    else:
+        pass

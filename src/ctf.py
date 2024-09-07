@@ -38,23 +38,23 @@ def ctf_other(ip):
             service_name = result['scan'][ip]['tcp'][port].get('name', 'Unknown')
             print(f"Port {port} is {port_status}")
             if port == '80' and port_status == 'open':
-                print('it\' website have HTTP connection')
+                print('[\033[32m+\033[0m] it\' website have HTTP connection')
                 print('trying to exploit it...')
                 http(ip,service_product,service_version)
             if port == '443' and port_status == 'open':
-                print('it\'s website have HTTPS connection')
+                print('[\033[32m+\033[0m] it\'s website have HTTPS connection')
                 print('trying to exploit it...')
                 https(ip,service_product,service_version)
             if port == '22' and port_status == 'open':
-                print('we got SSH connection')
+                print('[\033[32m+\033[0m] we got SSH connection')
                 print('trying to exploit it...')
                 ssh(ip,port)
             if port == '2222' and port_status == 'open':
-                print('we got SSH connection')
+                print('[\033[32m+\033[0m] we got SSH connection')
                 print('trying to exploit it...')
                 ssh(ip,port)
             if port == '21' and port_status == 'open':
-                print('we got FTP connection')
+                print('[\033[32m+\033[0m] we got FTP connection')
                 print('trying to exploit it...')
                 ftp(ip)
             if port_status == 'open' and port != ['21','2222','22','443','80']:
@@ -86,7 +86,7 @@ def ctf(ip):
             # Search for CVEs
             cves = search_cve(service_product, service_version)
             if cves:
-                print(f"[+] Found CVEs for {service_product} {service_version}:")
+                print(f"[\033[32m+\033[0m] Found CVEs for {service_product} {service_version}:")
                 for cve in cves:
                     print(f"    {cve['cve_id']}: {cve['description']}")
             else:
@@ -95,7 +95,7 @@ def ctf(ip):
             # Search for Exploits
             exploits = search_exploit(service_product, service_version)
             if exploits:
-                print(f"[+] Found Exploits for {service_product} {service_version}:")
+                print(f"[\033[32m+\033[0m] Found Exploits for {service_product} {service_version}:")
                 for exploit in exploits:
                     print(f"    {exploit}")
                     # Optionally try to exploit

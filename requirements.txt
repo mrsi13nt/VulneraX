@@ -6,3 +6,4 @@ paramiko
 argparse
 threading
 lxml
+BeautifulSoup
