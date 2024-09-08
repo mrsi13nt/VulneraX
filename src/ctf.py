@@ -42,11 +42,11 @@ def ctf_other(ip):
                 if port == '80' and port_status == 'open':
                     print('[\033[32m+\033[0m] it\' website have HTTP connection')
                     print('trying to exploit it...')
-                    http(ip,service_product,service_version)
+                    http(ip,port,service_product,service_version)
                 if port == '443' and port_status == 'open':
                     print('[\033[32m+\033[0m] it\'s website have HTTPS connection')
                     print('trying to exploit it...')
-                    https(ip,service_product,service_version)
+                    https(ip,port,service_product,service_version)
                 if port == '22' and port_status == 'open':
                     print('[\033[32m+\033[0m] we got SSH connection')
                     print('trying to exploit it...')
@@ -59,6 +59,8 @@ def ctf_other(ip):
                     print('[\033[32m+\033[0m] we got FTP connection')
                     print('trying to exploit it...')
                     ftp(ip)
+                if port in [25, 465, 587] and port_status == 'open':
+                    smtp(ip,port,service_version)
                 if port_status == 'open' and port != ['21','2222','22','443','80']:
                     print(f"Port {port} is {port_status}. Detected service: {service_name}, Product: {service_product}, Version: {service_version}")
                     services.append({
