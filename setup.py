@@ -5,6 +5,36 @@ import requests
 import socket
 import platform
 import shutil
+from src.configs import essential_tools,optional_tools
+
+
+
+def check_tool(tool_name):
+    """Check if a tool is installed."""
+    try:
+        subprocess.run([tool_name, '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+def install_tool(tool_name):
+    """Install a tool using apt-get."""
+    print(f"Installing {tool_name}...")
+    subprocess.run(['sudo', 'apt-get', 'install', '-y', tool_name], check=True)
+
+def check_and_install_tools(tools, category):
+    """Check and install tools from a given list."""
+    print(f"{category} checking...")
+    for tool in tools:
+        if check_tool(tool):
+            print(f"{tool} .... Ok")
+        else:
+            print(f"{tool} .... Not found")
+            install_tool(tool)
+
+
+
+
 
 
 current_user = os.getlogin()
@@ -12,6 +42,8 @@ current_user = os.getlogin()
 # Linux
 
 def linux():
+    check_and_install_tools(essential_tools, "Essential tools")
+    check_and_install_tools(optional_tools, "Optional tools")
     subprocess.run('pip install -r requirements.txt',shell=True) # requirments
     subprocess.run(f'mkdir /home/{current_user}/.VulneraX',shell=True)
     subprocess.run(f'mv src /home/{current_user}/.VulneraX/',shell=True)

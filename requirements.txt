@@ -7,3 +7,5 @@ argparse
 threading
 lxml
 BeautifulSoup
+psutil
+bluepy
