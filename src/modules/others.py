@@ -6,7 +6,6 @@ import re
 
 # Function to query NVD API for CVEs
 def search_cve(service, version):
-    """Searches for CVEs related to a service and version."""
     cve_list = []
     nvd_url = f"https://services.nvd.nist.gov/rest/json/cves/1.0?keyword={service}%20{version}"
     response = requests.get(nvd_url)
@@ -18,7 +17,7 @@ def search_cve(service, version):
             description = item['cve']['description']['description_data'][0]['value']
             cve_list.append({'cve_id': cve_id, 'description': description})
     else:
-        print(f"Failed to retrieve CVEs for {service} {version}")
+        print(f"[\033[31m!\033[0m] Failed to retrieve CVEs for {service} {version}")
     
     return cve_list
 
@@ -35,12 +34,12 @@ def search_exploit(service, version):
         for result in results:
             exploits.append(f"https://www.exploit-db.com{result}")
     else:
-        print(f"Failed to retrieve exploits for {service} {version}")
+        print(f"[\033[31m!\033[0m] Failed to retrieve exploits for {service} {version}")
 
     return exploits
 
 
-# Function to attempt to exploit the service (Example using Metasploit)
+# Function to attempt to exploit the service
 def run_exploit(exploit_url, service, version, target_ip, port):
     """Runs the exploit against the target IP."""
     print(f"Attempting to exploit {service} {version} on {target_ip}:{port} using {exploit_url}")
