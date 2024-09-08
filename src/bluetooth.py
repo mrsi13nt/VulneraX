@@ -1,5 +1,5 @@
 import time
-from bluepy.btle import Scanner, DefaultDelegate, Peripheral, UUID
+from bluepy.btle import Scanner, DefaultDelegate, Peripheral, BTLEManagementError
 
 class ScanDelegate(DefaultDelegate):
     def __init__(self, *args, **kwargs):
@@ -14,14 +14,19 @@ class ScanDelegate(DefaultDelegate):
 def scan_devices(duration=10):
     """Scan for Bluetooth devices for a given duration."""
     print("Scanning for Bluetooth devices...")
-    scanner = Scanner().withDelegate(ScanDelegate())
-    devices = scanner.scan(duration)
+    try:
+        scanner = Scanner().withDelegate(ScanDelegate())
+        devices = scanner.scan(duration)
 
-    for dev in devices:
-        print(f"Device {dev.addr} ({dev.addrType})")
-        for (adtype, desc, value) in dev.getScanData():
-            print(f"  {desc}: {value}")
-    return devices
+        for dev in devices:
+            print(f"Device {dev.addr} ({dev.addrType})")
+            for (adtype, desc, value) in dev.getScanData():
+                print(f"  {desc}: {value}")
+        return devices
+    except BTLEManagementError as e:
+        print(f"Error scanning for Bluetooth devices: {e}")
+        print("It looks like your system might not have a Bluetooth adapter.")
+        return []
 
 def discover_services(device_address):
     """Discover services on a Bluetooth device."""
@@ -61,4 +66,3 @@ def blue():
         perform_pairing_attack(first_device)
     else:
         print("No devices found during the scan.")
-

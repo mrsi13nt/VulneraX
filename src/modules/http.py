@@ -69,7 +69,7 @@ def http_info(ip):
 
 
 
-def check_http_https_vulnerability(ip, port, service_name, service_version):
+def check_http_vulnerability(ip, port, service_name, service_version):
     try:
         # Check HTTP/HTTPS connection
         url = f"http://{ip}:{port}" if port != 443 else f"https://{ip}:{port}"
@@ -142,4 +142,4 @@ def check_known_vulnerabilities(service_name, service_version):
 
 def http(target,port,p,v):
     http_info(target)
-    check_http_https_vulnerability(target,port,p,v)
+    check_http_vulnerability(target,port,p,v)

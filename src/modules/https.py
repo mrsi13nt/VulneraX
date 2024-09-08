@@ -2,6 +2,10 @@ import requests
 import os
 import ssl
 from urllib.request import socket
+import smtplib
+from email.mime.text import MIMEText
+from socket import gaierror
+from urllib.parse import urlparse
 
 
 
@@ -71,10 +75,78 @@ def https_info(ip):
         print("HTTPS service not detected or port 443 is closed.")
 
 
+def check_https_vulnerability(ip, port, service_name, service_version):
+    try:
+        # Check HTTP/HTTPS connection
+        url = f"http://{ip}:{port}" if port != 443 else f"https://{ip}:{port}"
+        response = requests.get(url, timeout=10)
+        print(f"HTTP/HTTPS Response Status Code: {response.status_code}")
+
+        # Check for potential vulnerabilities
+        check_vulnerability(response)
+
+        # Check for known vulnerabilities using NVD and CVE
+        print("Checking known vulnerabilities...")
+        check_known_vulnerabilities(service_name, service_version)
+
+    except requests.RequestException as e:
+        print(f"Failed to connect to HTTP/HTTPS server: {e}")
+
+def check_vulnerability(response):
+    # Check for common HTTP/HTTPS vulnerabilities
+    # Example: Check if the server is leaking sensitive information in headers
+    headers = response.headers
+    print("HTTP/HTTPS Headers:")
+    for header, value in headers.items():
+        print(f"{header}: {value}")
+
+    if 'Server' in headers:
+        server_info = headers['Server']
+        print(f"Server Info: {server_info}")
+        # Example vulnerability check based on server info
+        if "Apache" in server_info:
+            print("This server might be running an outdated version of Apache. Check for known vulnerabilities.")
+
+def check_known_vulnerabilities(service_name, service_version):
+    # Define API endpoints for NVD and CVE
+    nvd_api_url = "https://services.nvd.nist.gov/rest/json/cves/1.0"
+    cve_api_url = "https://cve.circl.lu/api/cve"
+
+    # Example NVD query
+    try:
+        response = requests.get(f"{nvd_api_url}?keyword={service_name}+{service_version}")
+        if response.status_code == 200:
+            data = response.json()
+            for item in data.get("result", {}).get("CVE_Items", []):
+                cve_id = item.get("cve", {}).get("CVE_data_meta", {}).get("ID", "N/A")
+                description = item.get("cve", {}).get("description", {}).get("description_data", [{}])[0].get("value", "No description")
+                print(f"NVD CVE ID: {cve_id}")
+                print(f"Description: {description}")
+        else:
+            print("Failed to retrieve data from NVD.")
+    
+    except requests.RequestException as e:
+        print(f"Error querying NVD: {e}")
+
+    # Example CVE query
+    try:
+        response = requests.get(f"{cve_api_url}/{service_name}/{service_version}")
+        if response.status_code == 200:
+            data = response.json()
+            for item in data:
+                cve_id = item.get("id", "N/A")
+                description = item.get("summary", "No description")
+                print(f"CVE ID: {cve_id}")
+                print(f"Description: {description}")
+        else:
+            print("Failed to retrieve data from CVE.")
+    
+    except requests.RequestException as e:
+        print(f"Error querying CVE: {e}")
 
 
 
 
-def https(target,p,v):
+def https(target,port,p,v):
     https_info(target)
-    print('coming soon...')
+    check_https_vulnerability(target,port,p,v)
