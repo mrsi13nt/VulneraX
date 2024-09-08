@@ -1,7 +1,6 @@
 import argparse
 import socket
 import sys
-import datetime
 from src.info_gather import *
 from src.logo import *
 from src.osint import *
@@ -59,14 +58,15 @@ def main():
 
     print(logo_main)
 
-    # check if it online or not
-    # if not check_network():
-    #     print("[\033[31mError\033[0m] No network connection. Please check your internet connection and try again.")
-    #     sys.exit(1)
-    # print("Network connection is available. Continuing with the program...")
+    #check if it online or not
+    if not check_network():
+        printt("[\033[31mError\033[0m] No network connection. Please check your internet connection and try again.")
+        sys.exit(1)
+    printt("Network connection is available. Continuing with the program...")
+    os.system('clear')
 
         
-    # port scanner
+    #port scanner
     if args.port:
         scan(args.port)
     # recon
@@ -84,24 +84,24 @@ def main():
     # Web
     if args.xss:
         if not args.url:
-            print('[\033[31m!\033[0m] please enter url to scan for XSS by entering: -u URL --xss')
+            printt('[\033[31m!\033[0m] please enter url to scan for XSS by entering: -u URL --xss')
             sys.exit(1)
         else:
             xss(args.url)
     if args.sqli:
         if not args.url:
-            print('[\033[31m!\033[0m] please enter url to scan for SQLi by entering: -u URL --sql')
+            printt('[\033[31m!\033[0m] please enter url to scan for SQLi by entering: -u URL --sql')
             sys.exit(1)
         else:
             check_sql_injection(args.url, parameters=None)
     if args.full:
         if not args.url:
-            print('[\033[31m!\033[0m] please enter url to scan for SQLi by entering: -u URL --sql')
+            printt('[\033[31m!\033[0m] please enter url to scan for SQLi by entering: -u URL --sql')
             sys.exit(1)
         else:
             full(args.url)
     if args.url:
-        print('[\033[31m!\033[0m] please enter type of scanning (--xss or --sql or --full)')
+        printt('[\033[31m!\033[0m] please enter type of scanning (--xss or --sql or --full)')
         sys.exit(1)
     # wireless
     if args.wireless == "1" or args.wireless == 1:
@@ -109,7 +109,7 @@ def main():
     elif args.wireless == "2" or args.wireless == 2:
         blue()
     elif args.wireless and args.wireless != ['1',1,'2',2]:
-        print("[\033[31m!\033[0m] wrong input for wireless pentest you should write for example : -w 1 \n")
+        printt("[\033[31m!\033[0m] wrong input for wireless pentest you should write for example : -w 1 \n")
     # config 
     if args.config:
         conf()

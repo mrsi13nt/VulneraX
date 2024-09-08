@@ -3,6 +3,7 @@ import ipaddress
 import re
 import requests
 from src.configs import ask
+from src.configs import printt
 
 # Regular Expression Pattern to extract the number of ports you want to scan. 
 # You have to specify <lowest_port_number>-<highest_port_number> (ex 10-100)
@@ -63,12 +64,13 @@ def scan(ip):
 
 # web recon
 def recon(web):
-    print('starting subdomain enum...')
-    #
-    print('strating filter subdomains')
-    #
-    print('subdomain enum finished\n results saved in subdomains.txt')
-    print('starting some fuzzing... (don\'t worry it\'s safe)')
-    print('[\033[31m!\033[0m] if you want custom threads you can change it from config file search about \'threads\'')
-    #requests.get('#')
-    print('s')
+    # print('starting subdomain enum...')
+    
+    # print('strating filter subdomains')
+    
+    # print('subdomain enum finished\n results saved in subdomains.txt')
+    # print('starting some fuzzing... (don\'t worry it\'s safe)')
+    # print('[\033[31m!\033[0m] if you want custom threads you can change it from config file search about \'threads\'')
+    # requests.get('#')
+    # print('s')
+    printt('coming soon...')

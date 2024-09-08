@@ -1,5 +1,6 @@
 import os
 import ftplib
+from src.configs import printt
 
 def check_anonymous_login(ip):
     # Try to log in with anonymous credentials
@@ -57,4 +58,4 @@ def ftp_info(ip):
 
 def ftp(target):
     ftp_info(target)
-    print('coming soon...')
+    printt('\nother more scanning will coming soon...')

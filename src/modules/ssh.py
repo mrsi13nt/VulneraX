@@ -3,7 +3,7 @@ import os
 import socket
 import sys
 import threading
-
+from src.configs import printt
 
 def banner_grab_ssh(ip):
     # Get the SSH banner to check the version
@@ -78,5 +78,5 @@ def ssh_info(ip):
 
 def ssh(target,port):
     ssh_info(target)
-    print("coming soon...")
+    printt('\nother more scanning will coming soon...')
     

@@ -141,3 +141,18 @@ def ask():
         sys.exit(1)
     else:
         pass
+
+
+
+import sys
+import time
+
+def printt(text, delay=0.05):
+    """Simulate a typing effect for the given text."""
+    for char in text:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(delay)
+    print()  # Move to the next line after the text is typed
+
+

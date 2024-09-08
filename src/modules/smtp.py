@@ -3,6 +3,7 @@ import smtplib
 from socket import socket, AF_INET, SOCK_STREAM, gaierror
 import requests
 from email.mime.text import MIMEText
+from src.configs import printt
 
 
 def banner_grab_smtp(ip, port):

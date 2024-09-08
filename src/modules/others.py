@@ -2,6 +2,7 @@ import subprocess
 import xml.etree.ElementTree as ET
 import requests
 import re
+from src.configs import printt
 
 
 # Function to query NVD API for CVEs

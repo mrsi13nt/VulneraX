@@ -5,7 +5,7 @@ import requests
 import socket
 import platform
 import shutil
-from src.configs import essential_tools,optional_tools
+from src.configs import essential_tools,optional_tools,printt
 
 
 

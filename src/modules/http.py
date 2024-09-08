@@ -1,5 +1,5 @@
 import requests
-import os
+from src.configs import printt
 
 
 def banner_grab_http(ip):

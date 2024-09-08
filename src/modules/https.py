@@ -1,12 +1,10 @@
 import requests
-import os
 import ssl
 from urllib.request import socket
-import smtplib
 from email.mime.text import MIMEText
 from socket import gaierror
 from urllib.parse import urlparse
-
+from src.configs import printt
 
 
 def ssl_info(ip):
