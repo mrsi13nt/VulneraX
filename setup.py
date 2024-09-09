@@ -177,7 +177,7 @@ def detect_os():
 
 
 
-def main(o):
+def main():
      
     # check for network
     def check_network():
