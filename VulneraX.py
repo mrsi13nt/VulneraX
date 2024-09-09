@@ -124,5 +124,6 @@ def main():
         wordlist()
 
 if __name__ == '__main__':
-    check_for_updates('https://github.com/mrsi13nt/VulneraX')
+    repo_url = "mrsi13nt/VulneraX"
+    check_for_updates(repo_url)
     main()
