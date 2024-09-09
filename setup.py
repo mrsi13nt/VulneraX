@@ -5,9 +5,10 @@ import requests
 import socket
 import platform
 import shutil
-from src.configs import essential_tools,optional_tools,printt
+from src.configs import printt
 
 
+essential_tools = "aircrack-ng"
 
 def check_tool(tool_name):
     """Check if a tool is installed."""
@@ -20,17 +21,16 @@ def check_tool(tool_name):
 def install_tool(tool_name):
     """Install a tool using apt-get."""
     print(f"Installing {tool_name}...")
-    subprocess.run(['sudo', 'apt-get', 'install', '-y', tool_name], check=True)
+    subprocess.run('sudo apt install kali-tools-wireless', shell=True)
 
 def check_and_install_tools(tools, category):
     """Check and install tools from a given list."""
     print(f"{category} checking...")
-    for tool in tools:
-        if check_tool(tool):
-            print(f"{tool} .... \033[32mOK\033[0m")
-        else:
-            print(f"{tool} .... \033[31mNot found\033[0m")
-            install_tool(tool)
+    if check_tool(tools):
+        print(f"{tools} .... \033[32mOK\033[0m")
+    else:
+        print(f"{tools} .... \033[31mNot found\033[0m")
+        install_tool(tools)
 
 
 
@@ -60,7 +60,6 @@ desktop_template = f'''
 
 def linux():
     check_and_install_tools(essential_tools, "Essential tools")
-    check_and_install_tools(optional_tools, "Optional tools")
     subprocess.run('pip install -r requirements.txt',shell=True) # requirments
     subprocess.run(f'mkdir /home/{current_user}/.VulneraX',shell=True)
     subprocess.run(f'mv src /home/{current_user}/.VulneraX/',shell=True)

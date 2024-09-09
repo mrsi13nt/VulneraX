@@ -118,20 +118,6 @@ sql_payloads = [
 
 
 
-# List of essential and optional tools
-essential_tools = [
-    "iw", "awk", "airmon-ng", "airodump-ng", "aircrack-ng",
-    "xterm", "ip", "lspci", "ps"
-]
-
-optional_tools = [
-    "bettercap", "ettercap", "dnsmasq", "hostapd-wpe", "beef-xss",
-    "aireplay-ng", "bully", "nft", "pixiewps", "dhcpd", "asleap",
-    "packetforge-ng", "hashcat", "wpaclean", "hostapd", "tcpdump",
-    "etterlog", "tshark", "mdk4", "wash", "hcxdumptool",
-    "reaver", "hcxpcapngtool", "john", "crunch", "lighttpd",
-    "openssl"
-]
 
 
 
