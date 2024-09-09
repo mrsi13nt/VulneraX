@@ -38,6 +38,23 @@ def check_and_install_tools(tools, category):
 
 
 current_user = os.getlogin()
+current_directory = os.getcwd()
+# Get the current user's home directory
+home_directory = os.path.expanduser('~')
+desktop_directory = os.path.join(home_directory, '.local/share/applications')
+desktop_file_path = os.path.join(desktop_directory, 'VulneraX.desktop')
+os.makedirs(desktop_directory, exist_ok=True)
+
+# Template for the .desktop file
+desktop_template = f'''
+    [Desktop Entry]
+    Name=Black candle
+    Exec=bash -c "python3 {home_directory}/.VulneraX/VulneraX.py; bash -i"
+    Terminal=true
+    Icon={home_directory}/.VulneraX/src/img/logo.png
+    Type=Application
+    Categories=03-webapp-analysis;Utility;
+'''
 
 # Linux
 
@@ -49,6 +66,14 @@ def linux():
     subprocess.run(f'mv src /home/{current_user}/.VulneraX/',shell=True)
     subprocess.run('sudo cp VulneraX.py /usr/bin/',shell=True)
     subprocess.run(f'mv VulneraX.py /home/{current_user}/.VulneraX/',shell=True)
+    subprocess.run(f'sudo ln -sf {home_directory}/.VulneraX/VulneraX.py /usr/bin/VulneraX', shell=True, check=True)
+    # the modified .desktop file
+    with open(desktop_file_path, 'w') as desktop_file:
+        desktop_file.write(desktop_template)
+
+    # set permission on the .desktop file
+    os.chmod(desktop_file_path, 0o755)
+    subprocess.run('sudo update-desktop-database', shell=True, check=True)
     subprocess.run('rm -r *',shell=True)
     sys.exit(1)
 

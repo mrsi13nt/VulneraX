@@ -42,7 +42,7 @@ def main():
     wireless = parser.add_argument_group('Wireless Pentesting')
     wireless.add_argument('-w', action='store',metavar='1 or 2', dest='wireless', help='make a full pentest on wireless (1 => wifi, 2 => bluetooth)')
     assessment = parser.add_argument_group('Vulnerability Assessment')
-    assessment.add_argument('-v', action='store_true', dest='assess', help='make a sorted report contains all your scanning results\nonly in web and OSINT and info gathering and wireless pentest')
+    assessment.add_argument('-v', action='store_true', dest='assess', help='make a full local system scan')
     web = parser.add_argument_group('Web attacks')
     web.add_argument('-u', action='store', dest='url',metavar='url', help='enter the url you want to scan')
     web.add_argument('--xss', action='store_true', dest='xss', help='scan for XSS')
