@@ -27,9 +27,9 @@ os_name = platform.system()
 
 
 # check for updates
-def get_latest_commit():
+def get_latest_commit(repo_url):
     # GitHub API to get the latest commit on the main branch
-    api_url = "https://api.github.com/repos/mrsi13nt/VulneraX/commits/main"
+    api_url = f"https://api.github.com/repos/{repo_url}/commits/main"
     try:
         response = requests.get(api_url)
         if response.status_code == 200:

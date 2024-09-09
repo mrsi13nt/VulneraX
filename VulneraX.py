@@ -65,7 +65,7 @@ def main():
     printt("Network connection is available. Continuing with the program...")
     os.system('clear')
 
-        
+    print(logo_main)
     #port scanner
     if args.port:
         scan(args.port)
