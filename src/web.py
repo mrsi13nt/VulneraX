@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import re
-from src.configs import sql_payloads,xss_payloads
+from src.configs import sql_payloads,xss_payloads,printt
 
 
 
@@ -29,7 +29,7 @@ def xss(url):
         # Find all forms
         forms = soup.find_all("form")
 
-        print(f"Found {len(forms)} forms on {url}")
+        print(f"[\033[32m+\033[0m] Found {len(forms)} forms on {url}")
 
         for form in forms:
             action = form.get("action")
@@ -55,7 +55,7 @@ def xss(url):
                         res = requests.get(form_url, params=data)
                     
                     if is_vulnerable(res):
-                        print(f"[!] XSS vulnerability found on {form_url}")
+                        print(f"[\033[32m+\033[0m] XSS vulnerability found on {form_url}")
                         print(f"Payload: {payload}")
                         break
                 else:
@@ -63,7 +63,7 @@ def xss(url):
                 break
 
     except requests.RequestException as e:
-        print(f"Error scanning {url}: {e}")
+        print(f"[\033[31m!\033[0m] Error scanning {url}: {e}")
 
 
 # SQLI
@@ -86,11 +86,11 @@ def check_sql_injection(url, parameters):
             try:
                 response = requests.get(url, params=test_params)
                 if "error" in response.text.lower() or "syntax" in response.text.lower():
-                    print(f"Potential SQL Injection vulnerability detected with payload '{payload}' in parameter '{param}'.")
+                    print(f"[\033[32m+\033[0m] Potential SQL Injection vulnerability detected with payload '{payload}' in parameter '{param}'.")
                 else:
                     print(f"Payload '{payload}' in parameter '{param}' seems safe.")
             except Exception as e:
-                print(f"Error testing payload '{payload}' in parameter '{param}': {e}")
+                print(f"[\033[31m!\033[0m] Error testing payload '{payload}' in parameter '{param}': {e}")
 
 
     parameters = {}
@@ -129,7 +129,7 @@ def scan_js_file(url, js_file):
         matches = api_key_pattern.findall(content)
         return matches
     else:
-        print(f"Failed to retrieve {parsed_url}")
+        print(f"[\033[31m!\033[0m] Failed to retrieve {parsed_url}")
         return []
 
 def js_scan(url):
@@ -139,9 +139,9 @@ def js_scan(url):
         print(f"Scanning {js_file} for exposed API keys...")
         api_keys = scan_js_file(url, js_file)
         if api_keys:
-            print(f"Exposed API keys found in {js_file}: {api_keys}")
+            print(f"[\033[32m+\033[0m] Exposed API keys found in {js_file}: {api_keys}")
         else:
-            print(f"No exposed API keys found in {js_file}.")
+            print(f"[\033[31m!\033[0m] No exposed API keys found in {js_file}.")
 
 
 
@@ -149,4 +149,4 @@ def js_scan(url):
 
 
 def full(url):
-    js_scan(url)
+    printt('coming soon...')

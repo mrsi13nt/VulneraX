@@ -17,7 +17,7 @@ def banner_grab_ssh(ip):
         transport.close()
         return banner
     except Exception as e:
-        print(f"Failed to grab SSH banner: {e}")
+        print(f"[\033[31m!\033[0m] Failed to grab SSH banner: {e}")
         return None
 
 def brute_force_ssh(ip, username_file, password_file):
@@ -34,14 +34,14 @@ def brute_force_ssh(ip, username_file, password_file):
                 ssh = paramiko.SSHClient()
                 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
                 ssh.connect(ip, port=22, username=username, password=password)
-                print(f"Login successful with {username}:{password}")
+                print(f"[\033[32m+\033[0m] Login successful with {username}:{password}")
                 ssh.close()
                 return True
             except paramiko.AuthenticationException:
                 # Login failed, continue trying
                 pass
             except Exception as e:
-                print(f"Error occurred during brute-force attempt: {e}")
+                print(f"[\033[31m!\033[0m] Error occurred during brute-force attempt: {e}")
                 return False
     print("Brute-force attack finished, no valid credentials found.")
     return False
@@ -53,9 +53,9 @@ def check_root_login(ip):
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(ip, port=22, username='root', password='wrong_password')
     except paramiko.AuthenticationException:
-        print("Root login is disabled or protected by a password.")
+        printt("Root login is disabled or protected by a password.")
     except Exception as e:
-        print(f"Root login check error: {e}")
+        print(f"[\033[31m!\033[0m] Root login check error: {e}")
 
 def ssh_info(ip):
     # Gather IP and scan for SSH vulnerabilities
@@ -64,7 +64,7 @@ def ssh_info(ip):
         # Grab the SSH banner
         banner = banner_grab_ssh(ip)
         if banner:
-            print(f"SSH Version Detected: {banner}")
+            print(f"[\033[32m+\033[0m] SSH Version Detected: {banner}")
         
         # Brute force login attempt
         username_file = 'usernames.txt'
@@ -74,7 +74,7 @@ def ssh_info(ip):
         # Check if root login is enabled
         check_root_login(ip)
     else:
-        print("SSH service not detected or port 22 is closed.")
+        print("[\033[31m!\033[0m] SSH service not detected or port 22 is closed.")
 
 def ssh(target,port):
     ssh_info(target)

@@ -16,7 +16,7 @@ def banner_grab_smtp(ip, port):
         print(f"SMTP Banner on port {port}: {banner}")
         return banner
     except Exception as e:
-        print(f"Failed to grab SMTP banner: {e}")
+        print(f"[\033[31m!\033[0m] Failed to grab SMTP banner: {e}")
         return None
 
 def check_open_relay(ip, port):
@@ -31,7 +31,7 @@ def check_open_relay(ip, port):
             else:
                 print("SMTP server is not an open relay.")
     except Exception as e:
-        print(f"Open relay test failed: {e}")
+        print(f"[\033[31m!\033[0m] Open relay test failed: {e}")
 
 def brute_force_smtp(ip, port, username_file, password_file):
     # Brute-force login attempts using smtplib
@@ -47,13 +47,13 @@ def brute_force_smtp(ip, port, username_file, password_file):
                 with smtplib.SMTP(ip, port) as server:
                     server.ehlo()
                     server.login(username, password)
-                    print(f"Login successful with {username}:{password}")
+                    print(f"[\033[32m+\033[0m] Login successful with {username}:{password}")
                     return True
             except smtplib.SMTPAuthenticationError:
                 # Login failed, continue trying
                 pass
             except Exception as e:
-                print(f"Error occurred during brute-force attempt: {e}")
+                print(f"[\033[31m!\033[0m] Error occurred during brute-force attempt: {e}")
                 return False
     print("Brute-force attack finished, no valid credentials found.")
     return False
@@ -73,7 +73,7 @@ def smtp_info(ip,port):
         password_file = 'passwords.txt'
         brute_force_smtp(ip, port, username_file, password_file)
     else:
-        print("SMTP service not detected or ports 25, 465, and 587 are closed.")
+        print("[\033[31m!\033[0m] SMTP service not detected or ports 25, 465, and 587 are closed.")
 
 
 def check_smtp_vulnerability(ip, port, service_version):
@@ -98,9 +98,9 @@ def check_smtp_vulnerability(ip, port, service_version):
         check_known_vulnerabilities(service_version)
 
     except (gaierror, ConnectionRefusedError, TimeoutError) as e:
-        print(f"Failed to connect to SMTP server: {e}")
+        print(f"[\033[31m!\033[0m] Failed to connect to SMTP server: {e}")
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"[\033[31m!\033[0m] An error occurred: {e}")
     finally:
         server.quit()
 
@@ -115,13 +115,13 @@ def check_vulnerability(server):
         server.sendmail("test@example.com", "test@example.com", msg.as_string())
         print("SMTP server seems to accept email sending. This could be a potential vector.")
     except smtplib.SMTPRecipientsRefused as e:
-        print(f"Recipient refused: {e}")
+        print(f"[\033[31m!\033[0m] Recipient refused: {e}")
     except smtplib.SMTPHeloError as e:
-        print(f"HELO Error: {e}")
+        print(f"[\033[31m!\033[0m] HELO Error: {e}")
     except smtplib.SMTPDataError as e:
-        print(f"Data Error: {e}")
+        print(f"[\033[31m!\033[0m] Data Error: {e}")
     except smtplib.SMTPException as e:
-        print(f"SMTP Exception: {e}")
+        print(f"[\033[31m!\033[0m] SMTP Exception: {e}")
 
 def check_known_vulnerabilities(service_version):
     # Define API endpoints for NVD and CVE
@@ -139,10 +139,10 @@ def check_known_vulnerabilities(service_version):
                 print(f"NVD CVE ID: {cve_id}")
                 print(f"Description: {description}")
         else:
-            print("Failed to retrieve data from NVD.")
+            print("[\033[31m!\033[0m] Failed to retrieve data from NVD.")
     
     except requests.RequestException as e:
-        print(f"Error querying NVD: {e}")
+        print(f"[\033[31m!\033[0m] Error querying NVD: {e}")
 
     # Example CVE query
     try:
@@ -155,10 +155,10 @@ def check_known_vulnerabilities(service_version):
                 print(f"CVE ID: {cve_id}")
                 print(f"Description: {description}")
         else:
-            print("Failed to retrieve data from CVE.")
+            print("[\033[31m!\033[0m] Failed to retrieve data from CVE.")
     
     except requests.RequestException as e:
-        print(f"Error querying CVE: {e}")
+        print(f"[\033[31m!\033[0m] Error querying CVE: {e}")
 
 
 def smtp(target,p,v):

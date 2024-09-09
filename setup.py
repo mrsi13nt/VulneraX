@@ -27,9 +27,9 @@ def check_and_install_tools(tools, category):
     print(f"{category} checking...")
     for tool in tools:
         if check_tool(tool):
-            print(f"{tool} .... Ok")
+            print(f"{tool} .... \033[32mOK\033[0m")
         else:
-            print(f"{tool} .... Not found")
+            print(f"{tool} .... \033[31mNot found\033[0m")
             install_tool(tool)
 
 
@@ -109,7 +109,7 @@ def windows():
                 else:
                     shutil.rmtree(file)
             except Exception as e:
-                print(f"Error while deleting {file}: {e}")
+                print(f"[\033[31m!\033[0m] Error while deleting {file}: {e}")
 
     # Exit the program
     sys.exit(1)
@@ -163,9 +163,9 @@ def main(o):
             except socket.error:
                 return False
     if not check_network():
-        print("[\033[31mError\033[0m] No network connection. Please check your internet connection and try again.")
+        printt("[\033[31mError\033[0m] No network connection. Please check your internet connection and try again.")
         sys.exit(1)
-    print("Network connection is available. Continuing with the program...\n")
+    printt("[\033[32m+\033[0m] Network connection is available. Continuing with the program...\n")
 
 if __name__ == '__main__':
     main()

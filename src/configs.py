@@ -3,7 +3,7 @@ import requests
 import os
 import platform
 import sys
-
+import time
 
 
 keys = {
@@ -12,10 +12,11 @@ keys = {
     'pwnd': '',
     'emailrep': '',
     'pipl': '',
-    'clearbit': '',
+    'clearbit': ''
+}
+key = {
     'socialsearch': ''
 }
-
 
 platforms = ['Twitter', 'Facebook', 'Instagram', 'LinkedIn']
 
@@ -35,10 +36,10 @@ def get_latest_commit():
             latest_commit = response.json()["sha"]
             return latest_commit
         else:
-            print(f"Failed to check for updates. HTTP Status: {response.status_code}")
+            print(f"[\033[31m!\033[0m] Failed to check for updates. HTTP Status: {response.status_code}")
             return None
     except Exception as e:
-        print(f"Error checking for updates: {str(e)}")
+        print(f"[\033[31m!\033[0m] Error checking for updates: {str(e)}")
         return None
 
 def get_local_commit():
@@ -46,7 +47,7 @@ def get_local_commit():
         result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True)
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
-        print(f"Error getting local commit: {e}")
+        print(f"[\033[31m!\033[0m] Error getting local commit: {e}")
         return None
 
 def check_for_updates(repo_url):
@@ -56,7 +57,7 @@ def check_for_updates(repo_url):
     if latest_commit and local_commit and latest_commit != local_commit:
         print("A new update is available!")
         choice = input("Do you want to update the tool? (y/n): ").lower()
-        if choice == 'y':
+        if choice == 'y' or choice == 'Y':
             update_tool()
         else:
             print("Continuing without update...")
@@ -69,9 +70,9 @@ def update_tool():
         # Pull the latest changes from the repository
         subprocess.run(["git", "pull"], check=True)
         subprocess.run('python3 setup.py',shell=True)
-        print("Update successful. Please restart the tool.")
+        print("[\033[32m+\033[0m] Update successful. Please restart the tool.")
     except subprocess.CalledProcessError as e:
-        print(f"Error during update: {e}")
+        print(f"[\033[31m!\033[0m] Error during update: {e}")
 
 
 # open the file
@@ -144,8 +145,6 @@ def ask():
 
 
 
-import sys
-import time
 
 def printt(text, delay=0.05):
     """Simulate a typing effect for the given text."""

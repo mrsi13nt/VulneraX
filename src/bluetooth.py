@@ -8,9 +8,9 @@ class ScanDelegate(DefaultDelegate):
 
     def handleDiscovery(self, dev, isNewDev, isNewData):
         if isNewDev:
-            print(f"Discovered new device: {dev.addr} ({dev.addrType})")
+            print(f"[\033[32m+\033[0m] Discovered new device: {dev.addr} ({dev.addrType})")
         elif isNewData:
-            print(f"Received new data from: {dev.addr}")
+            print(f"[\033[32m+\033[0m] Received new data from: {dev.addr}")
 
 def scan_devices(duration=10):
     """Scan for Bluetooth devices for a given duration."""
@@ -25,8 +25,8 @@ def scan_devices(duration=10):
                 print(f"  {desc}: {value}")
         return devices
     except BTLEManagementError as e:
-        printt(f"Error scanning for Bluetooth devices: {e}")
-        printt("\nIt looks like your system might not have a Bluetooth adapter.")
+        printt(f"[\033[31m!\033[0m] Error scanning for Bluetooth devices: {e}")
+        printt("\n[\033[31m!\033[0m] It looks like your system might not have a Bluetooth adapter.")
         return []
 
 def discover_services(device_address):
@@ -42,15 +42,15 @@ def discover_services(device_address):
 
         peripheral.disconnect()
     except Exception as e:
-        printt(f"Failed to connect or discover services: {e}")
+        printt(f"[\033[31m!\033[0m] Failed to connect or discover services: {e}")
 
 def perform_pairing_attack(device_address):
     """Simulate a pairing attack (for demonstration purposes)."""
     print(f"Attempting pairing attack on {device_address}...")
     # Pairing attack simulation - this is a placeholder for actual attack techniques
-    print("Note: Actual Bluetooth pairing attacks are complex and may require specific tools and techniques.")
+    print("\033[31mNote\033[0m: Actual Bluetooth pairing attacks are complex and may require specific tools and techniques.")
     time.sleep(2)
-    print("Pairing attack simulation complete.")
+    print("[\033[32m+\033[0m] Pairing attack simulation complete.")
 
 def blue():
     duration = 10  # Scan duration in seconds
@@ -66,4 +66,4 @@ def blue():
         # Perform a pairing attack simulation
         perform_pairing_attack(first_device)
     else:
-        print("No devices found during the scan.")
+        print("[\033[31m!\033[0m] No devices found during the scan.")

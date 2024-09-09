@@ -16,7 +16,7 @@ def ssl_info(ip):
                 cert = ssock.getpeercert()
                 print(f"SSL Certificate Info: {cert}")
     except Exception as e:
-        print(f"Failed to retrieve SSL info: {e}")
+        print(f"[\033[31m!\033[0m] Failed to retrieve SSL info: {e}")
 
 def brute_force_https_directories(ip, wordlist_file):
     # Try to brute-force common directories over HTTPS
@@ -29,9 +29,9 @@ def brute_force_https_directories(ip, wordlist_file):
         try:
             response = requests.get(url, verify=False)
             if response.status_code == 200:
-                print(f"Found directory: {url}")
+                print(f"[\033[32m+\033[0m] Found directory: {url}")
         except Exception as e:
-            print(f"Error testing directory {directory}: {e}")
+            print(f"[\033[31m!\033[0m] Error testing directory {directory}: {e}")
 
 def brute_force_https_auth(ip, username_file, password_file):
     # Brute-force HTTPS Basic Authentication
@@ -46,10 +46,10 @@ def brute_force_https_auth(ip, username_file, password_file):
                 print(f"Trying {username}:{password}...")
                 response = requests.get(f"https://{ip}", auth=(username, password), verify=False)
                 if response.status_code == 200:
-                    print(f"Login successful with {username}:{password}")
+                    print(f"[\033[32m+\033[0m] Login successful with {username}:{password}")
                     return True
             except Exception as e:
-                print(f"Error occurred during brute-force attempt: {e}")
+                print(f"[\033[31m!\033[0m] Error occurred during brute-force attempt: {e}")
                 return False
     print("Brute-force attack finished, no valid credentials found.")
     return False
@@ -70,7 +70,7 @@ def https_info(ip):
         password_file = 'passwords.txt'
         brute_force_https_auth(ip, username_file, password_file)
     else:
-        print("HTTPS service not detected or port 443 is closed.")
+        print("[\033[31m!\033[0m] HTTPS service not detected or port 443 is closed.")
 
 
 def check_https_vulnerability(ip, port, service_name, service_version):
@@ -88,7 +88,7 @@ def check_https_vulnerability(ip, port, service_name, service_version):
         check_known_vulnerabilities(service_name, service_version)
 
     except requests.RequestException as e:
-        print(f"Failed to connect to HTTP/HTTPS server: {e}")
+        print(f"[\033[31m!\033[0m] Failed to connect to HTTP/HTTPS server: {e}")
 
 def check_vulnerability(response):
     # Check for common HTTP/HTTPS vulnerabilities
@@ -121,10 +121,10 @@ def check_known_vulnerabilities(service_name, service_version):
                 print(f"NVD CVE ID: {cve_id}")
                 print(f"Description: {description}")
         else:
-            print("Failed to retrieve data from NVD.")
+            print("[\033[31m!\033[0m] Failed to retrieve data from NVD.")
     
     except requests.RequestException as e:
-        print(f"Error querying NVD: {e}")
+        print(f"[\033[31m!\033[0m] Error querying NVD: {e}")
 
     # Example CVE query
     try:
@@ -137,10 +137,10 @@ def check_known_vulnerabilities(service_name, service_version):
                 print(f"CVE ID: {cve_id}")
                 print(f"Description: {description}")
         else:
-            print("Failed to retrieve data from CVE.")
+            print("[\033[31m!\033[0m] Failed to retrieve data from CVE.")
     
     except requests.RequestException as e:
-        print(f"Error querying CVE: {e}")
+        print(f"[\033[31m!\033[0m] Error querying CVE: {e}")
 
 
 

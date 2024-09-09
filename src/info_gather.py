@@ -59,7 +59,7 @@ def scan(ip):
             ask()
         except:
             # We cannot scan some ports and this ensures the program doesn't crash when we try to scan them.
-            print(f"Cannot scan port {port}.")
+            print(f"[\033[31m!\033[0m] Cannot scan port {port}.")
 
 
 # web recon

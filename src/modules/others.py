@@ -43,7 +43,7 @@ def search_exploit(service, version):
 # Function to attempt to exploit the service
 def run_exploit(exploit_url, service, version, target_ip, port):
     """Runs the exploit against the target IP."""
-    print(f"Attempting to exploit {service} {version} on {target_ip}:{port} using {exploit_url}")
+    print(f"[\033[32m+\033[0m] Attempting to exploit {service} {version} on {target_ip}:{port} using {exploit_url}")
     
     # Example of running a Metasploit exploit command, replace with real usage
     msf_command = f"msfconsole -q -x 'use {exploit_url}; set RHOSTS {target_ip}; set RPORT {port}; run; exit'"

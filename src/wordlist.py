@@ -92,4 +92,4 @@ def wordlist():
         for password in passwords:
             f.write(f"{password}\n")
     
-    print("Password list generated and saved to password_list.txt.")
+    print("[\033[32m+\033[0m] Password list generated and saved to password_list.txt.")
