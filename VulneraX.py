@@ -1,5 +1,6 @@
 import argparse
 import socket
+import os
 import sys
 from src.info_gather import *
 from src.logo import *

@@ -53,7 +53,7 @@ desktop_template = f'''
     Terminal=true
     Icon={home_directory}/.VulneraX/src/img/logo.png
     Type=Application
-    Categories=03-webapp-analysis;Utility;
+    Categories=01-Information-Gathering;Utility;
 '''
 
 # Linux
@@ -64,6 +64,7 @@ def linux():
     subprocess.run(f'mkdir /home/{current_user}/.VulneraX',shell=True)
     subprocess.run(f'mv src /home/{current_user}/.VulneraX/',shell=True)
     subprocess.run('sudo cp VulneraX.py /usr/bin/',shell=True)
+    subprocess.run('sudo cp src /usr/bin/',shell=True)
     subprocess.run(f'mv VulneraX.py /home/{current_user}/.VulneraX/',shell=True)
     subprocess.run(f'sudo ln -sf {home_directory}/.VulneraX/VulneraX.py /usr/bin/VulneraX', shell=True, check=True)
     # the modified .desktop file
