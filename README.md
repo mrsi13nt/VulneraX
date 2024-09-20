@@ -1,4 +1,5 @@
 
+
 # VulneraX
 
 VulneraX is a comprehensive cybersecurity tool designed to help professionals with information gathering, OSINT, vulnerability assessment, and web attack detection. It includes multiple modules for scanning, searching, and testing a wide range of vulnerabilities such as XSS, SQL injection, and much more. 

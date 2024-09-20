@@ -69,7 +69,7 @@ def update_tool():
     try:
         # Pull the latest changes from the repository
         subprocess.run(["git", "pull"], check=True)
-        subprocess.run('python3 setup.py',shell=True)
+        subprocess.run('sudo python3 setup.py',shell=True)
         print("[\033[32m+\033[0m] Update successful. Please restart the tool.")
     except subprocess.CalledProcessError as e:
         print(f"[\033[31m!\033[0m] Error during update: {e}")

@@ -64,7 +64,7 @@ def linux():
     subprocess.run(f'mkdir /home/{current_user}/.VulneraX',shell=True)
     subprocess.run(f'mv src /home/{current_user}/.VulneraX/',shell=True)
     subprocess.run('sudo cp VulneraX.py /usr/bin/',shell=True)
-    subprocess.run('sudo cp src /usr/bin/',shell=True)
+    subprocess.run('sudo cp -r src /usr/bin/',shell=True)
     subprocess.run(f'mv VulneraX.py /home/{current_user}/.VulneraX/',shell=True)
     subprocess.run(f'sudo ln -sf {home_directory}/.VulneraX/VulneraX.py /usr/bin/VulneraX', shell=True, check=True)
     # the modified .desktop file
@@ -178,19 +178,19 @@ def detect_os():
 
 
 def main():
-     
+     print('start setup..')
     # check for network
-    def check_network():
-            try:
-                # Try to resolve the hostname
-                socket.gethostbyname("google.com")
-                return True
-            except socket.error:
-                return False
-    if not check_network():
-        printt("[\033[31mError\033[0m] No network connection. Please check your internet connection and try again.")
-        sys.exit(1)
-    printt("[\033[32m+\033[0m] Network connection is available. Continuing with the program...\n")
+    # def check_network():
+    #         try:
+    #             # Try to resolve the hostname
+    #             socket.gethostbyname("google.com")
+    #             return True
+    #         except socket.error:
+    #             return False
+    # if not check_network():
+    #     printt("[\033[31mError\033[0m] No network connection. Please check your internet connection and try again.")
+    #     sys.exit(1)
+    # printt("[\033[32m+\033[0m] Network connection is available. Continuing with the program...\n")
 
 if __name__ == '__main__':
     main()
