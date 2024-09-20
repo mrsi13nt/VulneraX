@@ -18,7 +18,7 @@ colorama.init()
 
 
 
-
+os_info = []
 # this to detect what Linux using
 def detect_linux_distro():
     try:
@@ -27,10 +27,12 @@ def detect_linux_distro():
             with open('/etc/os-release') as f:
                 release_info = f.readlines()
                 for line in release_info:
-                    if line.startswith('PRETTY_NAME'):
-                        distro = line.split('=')[1].strip().replace('"', '')
-                        print(f"Linux Distribution: {distro}")
-                        break
+                    if line.startswith('ID'):
+                        distro = line.split('=')[1].strip()
+                        os_info.append(distro)
+                    if line.startswith('VERSION_CODENAME'):
+                        distro1 = line.split('=')[1].strip()
+                        os_info.append(distro1)
         else:
             print("Unable to detect Linux distribution.")
     except Exception as e:
@@ -48,7 +50,7 @@ def detect_os():
     elif os_name == "Darwin":
         return True
     elif os_name == "Linux":
-        return True
+        detect_linux_distro()
     else:
         print("Unknown operating system: ", os_name)
         return False
@@ -84,6 +86,16 @@ def scanner_local():
         print('- Checking profiles...                                      [ \033[32mDONE\033[0m ]')
     else:
         print(colored("Error please try again...",'red'))
+        sys.exit(1)
+    print('')
+    print('---------------------------------------------------')
+    print(f'Operating system:          {os_name}')
+    print(f'Operating system name:     {os_info[1]}')
+    print(f'Operating system version:  {os_info[0]}')
+    print(f'Hardware platform:         {os.uname().machine}')
+    print(f'Kernel version:            {os.uname().release}')
+    print(f'Hostname:                  {os.uname().nodename}')
+    print('---------------------------------------------------')
 
 def scanner_remote():
     print('coming soon...')
