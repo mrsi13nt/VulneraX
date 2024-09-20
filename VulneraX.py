@@ -11,6 +11,7 @@ from src.web import *
 from src.ctf import *
 from src.wifi import *
 from src.bluetooth import *
+from src.scanner import *
 import subprocess
 
 
@@ -43,7 +44,8 @@ def main():
     wireless = parser.add_argument_group('Wireless Pentesting')
     wireless.add_argument('-w', action='store',metavar='1 or 2', dest='wireless', help='make a full pentest on wireless (1 => wifi, 2 => bluetooth)')
     assessment = parser.add_argument_group('Vulnerability Assessment')
-    assessment.add_argument('-v', action='store_true', dest='assess', help='make a full local system scan')
+    assessment.add_argument('-v', action='store_true', dest='local', help='make a full local system scan')
+    assessment.add_argument('-v', action='store_true', dest='remote', help='make a full remote system scan')
     web = parser.add_argument_group('Web attacks')
     web.add_argument('-u', action='store', dest='url',metavar='url', help='enter the url you want to scan')
     web.add_argument('--xss', action='store_true', dest='xss', help='scan for XSS')
@@ -104,6 +106,11 @@ def main():
     if args.url:
         printt('[\033[31m!\033[0m] please enter type of scanning (--xss or --sql or --full)')
         sys.exit(1)
+    # vuln assessment
+    if args.local:
+        scanner_local()
+    if args.remote:
+        scanner_remote()
     # wireless
     if args.wireless == "1" or args.wireless == 1:
         wifi()

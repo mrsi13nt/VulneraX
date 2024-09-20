@@ -4,6 +4,11 @@ import os
 import platform
 import sys
 import time
+import colorama
+from termcolor import colored
+
+# Initialize colorama for cross-platform colored output
+colorama.init()
 
 
 keys = {
@@ -39,7 +44,7 @@ def get_latest_commit(repo_url):
             print(f"[\033[31m!\033[0m] Failed to check for updates. HTTP Status: {response.status_code}")
             return None
     except Exception as e:
-        print(f"[\033[31m!\033[0m] Error checking for updates: {str(e)}")
+        print(f"[\033[31m!\033[0m] Error checking for updates")
         return None
 
 def get_local_commit():
@@ -55,17 +60,19 @@ def check_for_updates(repo_url):
     local_commit = get_local_commit()
     
     if latest_commit and local_commit and latest_commit != local_commit:
-        print("A new update is available!")
-        choice = input("Do you want to update the tool? (y/n): ").lower()
+        print(colored("A new update is available!",'green'))
+        choice = input(colored("Do you want to update the tool? (y/n): ",'blue')).lower()
         if choice == 'y' or choice == 'Y':
             update_tool()
         else:
-            print("Continuing without update...")
+            print(colored("Continuing without update...",'red'))
+    elif latest_commit and local_commit and latest_commit == local_commit:
+        print(colored("You are using the latest version of the tool.",'green'))
     else:
-        print("You are using the latest version of the tool.")
+        print(colored("faild to identify the updates",'red'))
 
 def update_tool():
-    print("Updating the tool...")
+    print(colored("Updating the tool...",'cyan'))
     try:
         # Pull the latest changes from the repository
         subprocess.run(["git", "pull"], check=True)
@@ -82,7 +89,7 @@ def conf():
     elif os_name == "Darwin":
         subprocess.run('mousepad',shell=True)
     elif os_name == "Linux":
-        subprocess.run(f'mousepad /home/{current_user}/mytools/VulneraX/src/configs.py', shell=True)
+        subprocess.run(f'mousepad /home/{current_user}.VulneraX/src/configs.py', shell=True)
     else:
         print("Unknown operating system: ", os_name)
 

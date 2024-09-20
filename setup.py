@@ -6,6 +6,11 @@ import socket
 import platform
 import shutil
 from src.configs import printt
+import colorama
+from termcolor import colored
+
+# Initialize colorama for cross-platform colored output
+colorama.init()
 
 
 essential_tools = "aircrack-ng"
@@ -25,7 +30,7 @@ def install_tool(tool_name):
 
 def check_and_install_tools(tools, category):
     """Check and install tools from a given list."""
-    print(f"{category} checking...")
+    print(colored(f"{category} checking...",'cyan'))
     if check_tool(tools):
         print(f"{tools} .... \033[32mOK\033[0m")
     else:

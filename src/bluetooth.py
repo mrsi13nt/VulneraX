@@ -65,5 +65,7 @@ def blue():
 
         # Perform a pairing attack simulation
         perform_pairing_attack(first_device)
-    else:
+    elif not devices:
         print("[\033[31m!\033[0m] No devices found during the scan.")
+    else:
+        print('there\'s a problem please check your bluetooth card')
