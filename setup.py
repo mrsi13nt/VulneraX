@@ -46,41 +46,43 @@ current_user = os.getlogin()
 current_directory = os.getcwd()
 # Get the current user's home directory
 home_directory = os.path.expanduser('~')
-desktop_directory = os.path.join(home_directory, '.local/share/applications')
+desktop_directory = os.path.join(home_directory, '/usr/share/kali-menu/applications')
 desktop_file_path = os.path.join(desktop_directory, 'VulneraX.desktop')
 os.makedirs(desktop_directory, exist_ok=True)
 
 # Template for the .desktop file
 desktop_template = f'''
     [Desktop Entry]
-    Name=Black candle
+    Name=VulneraX
     Exec=bash -c "python3 {home_directory}/.VulneraX/VulneraX.py; bash -i"
     Terminal=true
     Icon={home_directory}/.VulneraX/src/img/logo.png
     Type=Application
-    Categories=01-Information-Gathering;Utility;
+    Categories=Categories=01-info-gathering;01-04-network-scanners;02-vulnerability-analysis;
 '''
 
 # Linux
 
 def linux():
-    check_and_install_tools(essential_tools, "Essential tools")
     subprocess.run('pip install -r requirements.txt',shell=True) # requirments
-    subprocess.run(f'mkdir /home/{current_user}/.VulneraX',shell=True)
-    subprocess.run(f'mv src /home/{current_user}/.VulneraX/',shell=True)
-    subprocess.run('sudo cp VulneraX.py /usr/bin/',shell=True)
+    subprocess.run(f'mkdir -p {home_directory}/.VulneraX',shell=True)
+    subprocess.run(f'mv src {home_directory}/.VulneraX/',shell=True)
     subprocess.run('sudo cp -r src /usr/bin/',shell=True)
-    subprocess.run(f'mv VulneraX.py /home/{current_user}/.VulneraX/',shell=True)
+    subprocess.run(f'mv VulneraX.py {home_directory}/.VulneraX/',shell=True)
+    subprocess.run(f'sudo chmod +x {home_directory}/.VulneraX/VulneraX.py')
     subprocess.run(f'sudo ln -sf {home_directory}/.VulneraX/VulneraX.py /usr/bin/VulneraX', shell=True, check=True)
-    # the modified .desktop file
-    with open(desktop_file_path, 'w') as desktop_file:
-        desktop_file.write(desktop_template)
+    detect_kalilinux_distro()
+    if os_info[-1] == 'kali':
+        check_and_install_tools(essential_tools, "Essential tools")
+        # the modified .desktop file
+        with open(desktop_file_path, 'w') as desktop_file:
+            desktop_file.write(desktop_template)
 
-    # set permission on the .desktop file
-    os.chmod(desktop_file_path, 0o755)
-    subprocess.run('sudo update-desktop-database', shell=True, check=True)
-    subprocess.run('rm -r *',shell=True)
-    sys.exit(1)
+        # set permission on the .desktop file
+        os.chmod(desktop_file_path, 0o755)
+        subprocess.run('sudo update-desktop-database', shell=True, check=True)
+        subprocess.run('rm -r *',shell=True)
+        sys.exit(1)
 
 # macOS
 
@@ -159,22 +161,21 @@ def detect_os():
         linux()
     else:
         print("Unknown operating system: ", os_name)
-
-# def detect_linux_distro():
-#     try:
-#         # Check for popular Linux distros
-#         if os.path.exists('/etc/os-release'):
-#             with open('/etc/os-release') as f:
-#                 release_info = f.readlines()
-#                 for line in release_info:
-#                     if line.startswith('PRETTY_NAME'):
-#                         distro = line.split('=')[1].strip().replace('"', '')
-#                         print(f"Linux Distribution: {distro}")
-#                         break
-#         else:
-#             print("Unable to detect Linux distribution.")
-#     except Exception as e:
-#         print(f"An error occurred: {e}")
+os_info = []
+def detect_kalilinux_distro():
+    try:
+        # Check for popular Linux distros
+        if os.path.exists('/etc/os-release'):
+            with open('/etc/os-release') as f:
+                release_info = f.readlines()
+                for line in release_info:
+                    if line.startswith('ID'):
+                        distro = line.split('=')[1].strip()
+                        os_info.append(distro)
+        else:
+            print("Unable to detect Linux distribution.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 
