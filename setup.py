@@ -26,7 +26,8 @@ def check_tool(tool_name):
 def install_tool(tool_name):
     """Install a tool using apt-get."""
     print(f"Installing {tool_name}...")
-    subprocess.run('sudo apt install kali-tools-wireless', shell=True)
+    subprocess.run('sudo apt install kali-tools-wireless -y', shell=True)
+    subprocess.run('sudo apt install reaver -y')
 
 def check_and_install_tools(tools, category):
     """Check and install tools from a given list."""
@@ -72,7 +73,7 @@ def linux():
     subprocess.run(f'sudo chmod +x {home_directory}/.VulneraX/VulneraX.py')
     subprocess.run(f'sudo ln -sf {home_directory}/.VulneraX/VulneraX.py /usr/bin/VulneraX', shell=True, check=True)
     detect_kalilinux_distro()
-    if os_info[-1] == 'kali':
+    if os_info[-2] == 'kali':
         check_and_install_tools(essential_tools, "Essential tools")
         # the modified .desktop file
         with open(desktop_file_path, 'w') as desktop_file:
@@ -83,6 +84,10 @@ def linux():
         subprocess.run('sudo update-desktop-database', shell=True, check=True)
         subprocess.run('rm -r *',shell=True)
         sys.exit(1)
+    elif os_info[-2] == 'ubuntu':
+        print('soon')
+    if os_info[-1] == 'arch':
+        subprocess.run('sudo pacman -S wireless_tools',shell=True)
 
 # macOS
 
@@ -172,6 +177,9 @@ def detect_kalilinux_distro():
                     if line.startswith('ID'):
                         distro = line.split('=')[1].strip()
                         os_info.append(distro)
+                    if line.startswith('ID_LIKE'):
+                        distro2 = line.split('=')[1].strip()
+                        os_info.append(distro2)
         else:
             print("Unable to detect Linux distribution.")
     except Exception as e:

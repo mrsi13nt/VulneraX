@@ -64,8 +64,10 @@ def check_for_updates(repo_url):
         choice = input(colored("Do you want to update the tool? (y/n): ",'blue')).lower()
         if choice == 'y' or choice == 'Y':
             update_tool()
+        elif choice == 'n' or choice == 'N':
+            printt(colored('Continuing without update...','red'))
         else:
-            print(colored("Continuing without update...",'red'))
+            print(colored("wrong answer ! \n Continuing without update...",'red'))
     elif latest_commit and local_commit and latest_commit == local_commit:
         print(colored("You are using the latest version of the tool.",'green'))
     else:
@@ -89,7 +91,7 @@ def conf():
     elif os_name == "Darwin":
         subprocess.run('mousepad',shell=True)
     elif os_name == "Linux":
-        subprocess.run(f'mousepad /home/{current_user}.VulneraX/src/configs.py', shell=True)
+        subprocess.run(f'mousepad /home/{current_user}/.VulneraX/src/configs.py', shell=True)
     else:
         print("Unknown operating system: ", os_name)
 

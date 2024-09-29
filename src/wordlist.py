@@ -1,6 +1,9 @@
+import os
 import itertools
 import random
 from typing import List, Dict
+
+home_directory = os.path.expanduser('~')
 
 class PasswordGenerator:
     def __init__(self):
@@ -88,8 +91,8 @@ def wordlist():
     print('please wait a little')
     passwords = generator.generate_password_list(user_info)
     
-    with open('password_list.txt', 'w') as f:
+    with open(f'{home_directory}/password_list.txt', 'w') as f:
         for password in passwords:
             f.write(f"{password}\n")
     
-    print("[\033[32m+\033[0m] Password list generated and saved to password_list.txt.")
+    print(f"[\033[32m+\033[0m] Password list generated and saved to {home_directory}/password_list.txt.")
