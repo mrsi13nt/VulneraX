@@ -45,7 +45,7 @@ def main():
     wireless.add_argument('-w', action='store',metavar='1 or 2', dest='wireless', help='make a full pentest on wireless (1 => wifi, 2 => bluetooth)')
     assessment = parser.add_argument_group('Vulnerability Assessment')
     assessment.add_argument('-v', action='store_true', dest='local', help='make a full local system scan')
-    assessment.add_argument('-v', action='store_true', dest='remote', help='make a full remote system scan')
+    assessment.add_argument('-vr', action='store_true', dest='remote', help='make a full remote system scan')
     web = parser.add_argument_group('Web attacks')
     web.add_argument('-u', action='store', dest='url',metavar='url', help='enter the url you want to scan')
     web.add_argument('--xss', action='store_true', dest='xss', help='scan for XSS')
@@ -116,7 +116,7 @@ def main():
         wifi()
     elif args.wireless == "2" or args.wireless == 2:
         blue()
-    elif args.wireless and args.wireless != ['1',1,'2',2]:
+    elif args.wireless and args.wireless not in ['1',1,'2',2]:
         printt("[\033[31m!\033[0m] wrong input for wireless pentest you should write for example : -w 1 \n")
     # config 
     if args.config:
