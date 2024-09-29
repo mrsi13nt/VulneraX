@@ -1,18 +1,22 @@
 import time
+import logging
 from bluepy.btle import Scanner, DefaultDelegate, Peripheral, BTLEManagementError
 from src.configs import printt
 
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 class ScanDelegate(DefaultDelegate):
     def __init__(self, *args, **kwargs):
-        DefaultDelegate.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def handleDiscovery(self, dev, isNewDev, isNewData):
         if isNewDev:
-            print(f"[\033[32m+\033[0m] Discovered new device: {dev.addr} ({dev.addrType})")
+            logging.info(f"Discovered new device: {dev.addr} ({dev.addrType})")
         elif isNewData:
-            print(f"[\033[32m+\033[0m] Received new data from: {dev.addr}")
+            logging.info(f"Received new data from: {dev.addr}")
 
-def scan_devices(duration=10):
+def scan_devices(duration=10) -> list:
     """Scan for Bluetooth devices for a given duration."""
     printt("Scanning for Bluetooth devices...")
     try:
@@ -20,37 +24,37 @@ def scan_devices(duration=10):
         devices = scanner.scan(duration)
 
         for dev in devices:
-            print(f"Device {dev.addr} ({dev.addrType})")
+            logging.info(f"Device {dev.addr} ({dev.addrType})")
             for (adtype, desc, value) in dev.getScanData():
-                print(f"  {desc}: {value}")
+                logging.info(f"  {desc}: {value}")
         return devices
     except BTLEManagementError as e:
-        printt(f"[\033[31m!\033[0m] Error scanning for Bluetooth devices: {e}")
-        printt("\n[\033[31m!\033[0m] It looks like your system might not have a Bluetooth adapter.")
+        printt(f"Error scanning for Bluetooth devices: {e}")
+        printt("It looks like your system might not have a Bluetooth adapter.")
         return []
 
-def discover_services(device_address):
+def discover_services(device_address: str):
     """Discover services on a Bluetooth device."""
-    print(f"Connecting to device {device_address}...")
+    logging.info(f"Connecting to device {device_address}...")
     try:
         peripheral = Peripheral(device_address)
         services = peripheral.getServices()
 
-        print(f"Services on {device_address}:")
+        logging.info(f"Services on {device_address}:")
         for service in services:
-            print(f"  {service.uuid}")
+            logging.info(f"  {service.uuid}")
 
         peripheral.disconnect()
     except Exception as e:
-        printt(f"[\033[31m!\033[0m] Failed to connect or discover services: {e}")
+        printt(f"Failed to connect or discover services: {e}")
 
-def perform_pairing_attack(device_address):
+def perform_pairing_attack(device_address: str):
     """Simulate a pairing attack (for demonstration purposes)."""
-    print(f"Attempting pairing attack on {device_address}...")
+    logging.info(f"Attempting pairing attack on {device_address}...")
     # Pairing attack simulation - this is a placeholder for actual attack techniques
-    print("\033[31mNote\033[0m: Actual Bluetooth pairing attacks are complex and may require specific tools and techniques.")
+    logging.warning("Note: Actual Bluetooth pairing attacks are complex and may require specific tools and techniques.")
     time.sleep(2)
-    print("[\033[32m+\033[0m] Pairing attack simulation complete.")
+    logging.info("Pairing attack simulation complete.")
 
 def blue():
     duration = 10  # Scan duration in seconds
@@ -65,7 +69,6 @@ def blue():
 
         # Perform a pairing attack simulation
         perform_pairing_attack(first_device)
-    elif not devices:
-        print("[\033[31m!\033[0m] No devices found during the scan.")
     else:
-        print('there\'s a problem please check your bluetooth card')
+        logging.warning("No devices found during the scan.")
+

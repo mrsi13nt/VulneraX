@@ -6,14 +6,13 @@ from src.info_gather import recon,scan
 from src.logo import logo,logo_main
 from src.osint import lookup_domain,lookup_ip,search_email,social_media
 from src.wordlist import wordlist
-from src.configs import check_for_updates,conf
-from src.web import *
+from src.configs import check_for_updates,conf,printt
+from src.web import xss,check_sql_injection,full
 from src.ctf import ctf
 from src.wifi import wifi
 from src.bluetooth import blue
 from src.scanner import scanner_local,scanner_remote
 from src.tools import tools
-import subprocess
 
 
 # check network
