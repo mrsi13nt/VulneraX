@@ -2,16 +2,17 @@ import argparse
 import socket
 import os
 import sys
-from src.info_gather import *
-from src.logo import *
-from src.osint import *
-from src.wordlist import *
-from src.configs import *
+from src.info_gather import recon,scan
+from src.logo import logo,logo_main
+from src.osint import lookup_domain,lookup_ip,search_email,social_media
+from src.wordlist import wordlist
+from src.configs import check_for_updates,conf
 from src.web import *
-from src.ctf import *
-from src.wifi import *
-from src.bluetooth import *
-from src.scanner import *
+from src.ctf import ctf
+from src.wifi import wifi
+from src.bluetooth import blue
+from src.scanner import scanner_local,scanner_remote
+from src.tools import tools
 import subprocess
 
 
@@ -126,7 +127,7 @@ def main():
         ctf(args.ctf)
     # Install tools
     if args.tools:
-        subprocess.run('bash src/tools.sh',shell=True)
+        tools()
     # wordlist maker
     if args.wordlist:
         wordlist()
