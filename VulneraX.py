@@ -14,6 +14,9 @@ from src.bluetooth import blue
 from src.scanner import scanner_local, scanner_remote
 from src.tools import tools
 
+
+sys.dont_write_bytecode = True
+
 # Check network connection
 def check_network():
     try:

@@ -56,8 +56,10 @@ def get_local_commit():
         return None
 
 def check_for_updates(repo_url):
+    printt('checking updates...')
     latest_commit = get_latest_commit(repo_url)
     local_commit = get_local_commit()
+    time.sleep(3)
     
     if latest_commit and local_commit and latest_commit != local_commit:
         print(colored("A new update is available!",'green'))
@@ -66,15 +68,17 @@ def check_for_updates(repo_url):
             update_tool()
         elif choice == 'n' or choice == 'N':
             printt(colored('Continuing without update...','red'))
+            clear_screen()
         else:
-            print(colored("wrong answer ! \n Continuing without update...",'red'))
+            printt(colored("wrong answer ! \n Continuing without update...",'red'))
     elif latest_commit and local_commit and latest_commit == local_commit:
-        print(colored("You are using the latest version of the tool.",'green'))
+        printt(colored("You are using the latest version of the tool.",'green'))
+        clear_screen()
     else:
-        print(colored("faild to identify the updates",'red'))
+        printt(colored("faild to identify the updates",'red'))
 
 def update_tool():
-    print(colored("Updating the tool...",'cyan'))
+    printt(colored("Updating the tool...",'cyan'))
     try:
         # Pull the latest changes from the repository
         subprocess.run(["git", "pull"], check=True)
@@ -149,8 +153,16 @@ def ask():
     else:
         pass
 
-
-
+def clear_screen():
+    os_name = platform.system()
+    if os_name == "Windows":
+        subprocess.run('cls',shell=True)
+    elif os_name == "Darwin":
+        subprocess.run('clear',shell=True)
+    elif os_name == "Linux":
+        subprocess.run('clear',shell=True)
+    else:
+        print("Unknown operating system: ", os_name)
 
 def printt(text, delay=0.05):
     """Simulate a typing effect for the given text."""

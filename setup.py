@@ -1,7 +1,6 @@
 import os
 import sys
 import subprocess
-import socket
 import platform
 import shutil
 from src.configs import printt
@@ -25,7 +24,7 @@ def check_tool(tool_name):
 
 def install_tool(tool_name):
     """Install a tool using apt-get."""
-    print(f"Installing {tool_name}...")
+    printt(f"Installing {tool_name}...")
     subprocess.run('sudo apt install kali-tools-wireless -y', shell=True)
     subprocess.run('sudo apt install reaver -y')
 
@@ -85,7 +84,9 @@ def linux():
         subprocess.run('rm -r *',shell=True)
         sys.exit(1)
     elif os_info[-2] == 'ubuntu':
-        print('soon')
+        check_and_install_tools(essential_tools, "Essential tools")
+        subprocess.run('rm -r *',shell=True)
+        sys.exit(1)
     if os_info[-1] == 'arch':
         subprocess.run('sudo pacman -S wireless_tools',shell=True)
 
