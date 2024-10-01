@@ -87,9 +87,9 @@ def update_tool():
 # open the file
 def conf():
     if os_name == "Windows":
-        subprocess.run('mousepad ',shell=True)
+        subprocess.run(f'start notepad C:\\Users\\{current_user}\\.VulneraX\\src\\configs.py',shell=True)
     elif os_name == "Darwin":
-        subprocess.run('mousepad',shell=True)
+        subprocess.run(f'open /Users/{current_user}/.VulneraX/src/configs.py',shell=True)
     elif os_name == "Linux":
         subprocess.run(f'mousepad /home/{current_user}/.VulneraX/src/configs.py', shell=True)
     else:

@@ -1,13 +1,13 @@
 import os
 import sys
 import subprocess
-import requests
 import socket
 import platform
 import shutil
 from src.configs import printt
 import colorama
 from termcolor import colored
+import winshell
 
 # Initialize colorama for cross-platform colored output
 colorama.init()
@@ -101,11 +101,11 @@ def macOS():
     # Move the 'src' folder to the hidden .VulneraX directory
     subprocess.run(f'mv src /Users/{current_user}/.VulneraX/', shell=True)
 
-    # Copy VulneraX.py to /usr/local/bin (the typical location for executables in macOS)
-    subprocess.run('sudo cp VulneraX.py /usr/local/bin/', shell=True)
-
     # Move VulneraX.py to the hidden .VulneraX directory
     subprocess.run(f'mv VulneraX.py /Users/{current_user}/.VulneraX/', shell=True)
+
+    # create shortcut
+    subprocess.run(f'sudo ln -sf /Users/{current_user}/.VulneraX/VulneraX.py /usr/local/bin/VulneraX', shell=True, check=True)
 
     # Remove all files in the current directory
     subprocess.run('rm -r *', shell=True)
@@ -115,39 +115,72 @@ def macOS():
 
 # Windows
 def windows():
+
+    # Create directory for VulneraX in the user's home directory
+    vulneraX_directory = os.path.join(home_directory, 'VulneraX')
+    os.makedirs(vulneraX_directory, exist_ok=True)
+
     # Install required Python packages
     subprocess.run('pip install -r requirements.txt', shell=True)
 
-    # Create a hidden directory for VulneraX in the user's home directory
-    # Windows uses %USERPROFILE% or os.environ['USERPROFILE'] to get the user's home directory
-    vulnerax_dir = f"C:\\Users\\{current_user}\\.VulneraX"
+    # Move source files to the VulneraX directory
+    try:
+        shutil.move('src', vulneraX_directory)
+        shutil.move('VulneraX.py', vulneraX_directory)
+    except Exception as e:
+        print(f"[\033[31m!\033[0m] Error moving files: {e}")
+        sys.exit(1)
+
+    # Create a batch file for running the tool
+    batch_file_path = os.path.join(home_directory, 'VulneraX.bat')
+    batch_template = f'''
+    @echo off
+    python "{vulneraX_directory}\\VulneraX.py"
+    pause
+    '''
     
-    if not os.path.exists(vulnerax_dir):
-        os.makedirs(vulnerax_dir)
+    # Write the batch file
+    try:
+        with open(batch_file_path, 'w') as batch_file:
+            batch_file.write(batch_template)
+    except Exception as e:
+        print(f"[\033[31m!\033[0m] Error creating batch file: {e}")
+        sys.exit(1)
 
-    # Move the 'src' folder to the hidden .VulneraX directory
-    src_dir = os.path.join(os.getcwd(), 'src')
-    shutil.move(src_dir, vulnerax_dir)
+    # Optional: Create a shortcut on the desktop
+    desktop_directory = os.path.join(home_directory, 'Desktop')
+    shortcut_path = os.path.join(desktop_directory, 'VulneraX.lnk')
 
-    # Copy VulneraX.py to a directory in the PATH (e.g., C:\Windows\System32 or user-defined directory)
-    # It's better to use a user-defined directory rather than System32 due to permission issues
-    vulnerax_exe = os.path.join(vulnerax_dir, 'VulneraX.py')
-    shutil.copy(vulnerax_exe, f"C:\\Users\\{current_user}\\AppData\\Local\\Programs\\VulneraX\\")
+    create_shortcut(batch_file_path, shortcut_path, vulneraX_directory)
 
-    # Move VulneraX.py to the hidden .VulneraX directory (if necessary)
-    shutil.move('VulneraX.py', vulnerax_dir)
+    # Print completion message
+    print(f'Setup complete. You can run VulneraX from the desktop or by executing the batch file located at {batch_file_path}.')
 
-    # Remove all files in the current directory
+    # Clean up current directory
+    cleanup_current_directory()
+
+def create_shortcut(target, shortcut_path, working_directory):
+    try:
+        with winshell.shortcut(shortcut_path) as shortcut:
+            shortcut.path = target
+            shortcut.working_directory = working_directory
+            shortcut.description = "VulneraX Tool"
+            shortcut.icon_location = os.path.join(working_directory, "src", "img", "logo.ico")
+    except Exception as e:
+        print(f"[\033[31m!\033[0m] Error creating shortcut: {e}")
+
+def cleanup_current_directory():
+    # Remove all files and directories in the current directory
     for file in os.listdir(os.getcwd()):
-        if os.path.isfile(file) or os.path.isdir(file):
-            try:
-                if os.path.isfile(file):
-                    os.remove(file)
-                else:
-                    shutil.rmtree(file)
-            except Exception as e:
-                print(f"[\033[31m!\033[0m] Error while deleting {file}: {e}")
-
+        file_path = os.path.join(os.getcwd(), file)
+        try:
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f"[\033[31m!\033[0m] Error while deleting {file_path}: {e}")
+    
     # Exit the program
     sys.exit(1)
 

@@ -9,3 +9,4 @@ lxml
 BeautifulSoup
 psutil
 bluepy
+winshell
