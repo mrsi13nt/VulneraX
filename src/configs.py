@@ -58,7 +58,7 @@ def get_local_commit():
             check=True,
             cwd=repo_path  # Use the repo path here
         )
-        
+
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         print(f"[\033[31m!\033[0m] Error getting local commit: {e}")
@@ -87,11 +87,17 @@ def check_for_updates(repo_url):
         printt(colored("faild to identify the updates",'red'))
 
 def update_tool():
-    printt(colored("Updating the tool...",'cyan'))
+    printt(colored("Updating the tool...", 'cyan'))
     try:
         # Pull the latest changes from the repository
         subprocess.run(["git", "pull"], check=True)
-        subprocess.run('sudo python3 setup.py',shell=True)
+        
+        # Install/Update the required dependencies (pip install from requirements.txt)
+        subprocess.run('pip install -r requirements.txt', shell=True, check=True)
+
+        # Execute the setup script if needed
+        subprocess.run('sudo python3 setup.py', shell=True)
+
         print("[\033[32m+\033[0m] Update successful. Please restart the tool.")
     except subprocess.CalledProcessError as e:
         print(f"[\033[31m!\033[0m] Error during update: {e}")
