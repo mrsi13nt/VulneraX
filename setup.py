@@ -6,7 +6,7 @@ import shutil
 from src.configs import printt
 import colorama
 from termcolor import colored
-import winshell
+
 
 # Initialize colorama for cross-platform colored output
 colorama.init()
@@ -116,7 +116,7 @@ def macOS():
 
 # Windows
 def windows():
-
+    import winshell
     # Create directory for VulneraX in the user's home directory
     vulneraX_directory = os.path.join(home_directory, 'VulneraX')
     os.makedirs(vulneraX_directory, exist_ok=True)
@@ -161,6 +161,7 @@ def windows():
     cleanup_current_directory()
 
 def create_shortcut(target, shortcut_path, working_directory):
+    import winshell
     try:
         with winshell.shortcut(shortcut_path) as shortcut:
             shortcut.path = target
