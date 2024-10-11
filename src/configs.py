@@ -10,7 +10,7 @@ from termcolor import colored
 # Initialize colorama for cross-platform colored output
 colorama.init()
 
-
+home_dir = os.path.expanduser('~')
 keys = {
     'hunter': '',
     'shodan': '',
@@ -49,7 +49,15 @@ def get_latest_commit(repo_url):
 
 def get_local_commit():
     try:
-        result = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True)
+        # Specify the path to your Git repository
+        repo_path = f"{home_dir}/.VulneraX"  # Update this path as necessary
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=repo_path  # Use the repo path here
+        )
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         print(f"[\033[31m!\033[0m] Error getting local commit: {e}")
