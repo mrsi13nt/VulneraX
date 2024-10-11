@@ -113,7 +113,7 @@ def update_tool():
         # Re-run setup (if required)
         subprocess.run('sudo python3 setup.py', shell=True)
 
-        print("[\033[32m+\033[0m] Update successful. Please restart the tool.")
+        print("[\033[32m+\033[0m] yay! Update successful. Please restart the tool.")
 
     except subprocess.CalledProcessError as e:
         print(f"[\033[31m!\033[0m] Error during update: {e}")
