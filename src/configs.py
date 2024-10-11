@@ -87,20 +87,38 @@ def check_for_updates(repo_url):
         printt(colored("faild to identify the updates",'red'))
 
 def update_tool():
+    destination_directory = f"{home_dir}/.VulneraX"  # This is where you copied the tool
+
     printt(colored("Updating the tool...", 'cyan'))
+
     try:
-        # Pull the latest changes from the repository
-        subprocess.run(["git", "pull"], check=True)
+        # Check if the .git directory exists in the destination
+        git_directory = os.path.join(destination_directory, ".git")
         
-        # Install/Update the required dependencies (pip install from requirements.txt)
+        if not os.path.exists(git_directory):
+            print(f"[\033[31m!\033[0m] Error: '.git' directory not found in {destination_directory}.")
+            return
+        
+        # Change directory to the location of the tool
+        os.chdir(destination_directory)
+        print(f"[\033[32m+\033[0m] Changed to directory: {destination_directory}")
+
+        # Perform a git pull to get the latest updates
+        subprocess.run(["git", "pull"], check=True)
+        print(f"[\033[32m+\033[0m] Pulled the latest changes successfully.")
+
+        # Install/update requirements if any (replace this if not applicable)
         subprocess.run('pip install -r requirements.txt', shell=True, check=True)
 
-        # Execute the setup script if needed
+        # Re-run setup (if required)
         subprocess.run('sudo python3 setup.py', shell=True)
 
         print("[\033[32m+\033[0m] Update successful. Please restart the tool.")
+
     except subprocess.CalledProcessError as e:
         print(f"[\033[31m!\033[0m] Error during update: {e}")
+    except Exception as e:
+        print(f"[\033[31m!\033[0m] Unexpected error: {e}")
 
 
 # open the file

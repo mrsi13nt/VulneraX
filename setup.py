@@ -74,7 +74,7 @@ def linux():
         subprocess.run(f'mkdir -p {home_directory}/.VulneraX',shell=True)
         print(f"Copying files from {current_directory} to {destination_directory}...")
         # Copy files from current directory to the destination (this includes .git)
-        shutil.copytree(current_directory, destination_directory)
+        shutil.copytree(current_directory, destination_directory,dirs_exist_ok=True)
 
         # Set executable permissions on the main script
         subprocess.run(['sudo', 'chmod', '+x', f'{destination_directory}/VulneraX.py'], check=True)
