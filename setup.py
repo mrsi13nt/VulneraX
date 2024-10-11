@@ -84,7 +84,7 @@ def linux():
         
         # Detect the Linux distro and install necessary tools
         detect_kalilinux_distro()
-        if os_info[-2] == 'kali':
+        if os_info[-2] == 'kali' or os_info[-1] == 'kali':
             check_and_install_tools(essential_tools, "Essential tools")
             
             # the modified .desktop file
