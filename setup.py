@@ -70,7 +70,7 @@ def linux():
         if os.path.exists(destination_directory):
             print(f"Removing existing directory: {destination_directory}")
             shutil.rmtree(destination_directory)
-        #subprocess.run('pip install -r requirements.txt',shell=True) # requirments
+        subprocess.run('pip install -r requirements.txt --break-system-packages',shell=True) # requirments
         subprocess.run(f'mkdir -p {home_directory}/.VulneraX',shell=True)
         print(f"Copying files from {current_directory} to {destination_directory}...")
         # Copy files from current directory to the destination (this includes .git)

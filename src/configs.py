@@ -108,7 +108,7 @@ def update_tool():
         print(f"[\033[32m+\033[0m] Pulled the latest changes successfully.")
 
         # Install/update requirements if any (replace this if not applicable)
-        subprocess.run('pip install -r requirements.txt', shell=True, check=True)
+        subprocess.run('pip install -r requirements.txt --break-system-packages', shell=True, check=True)
 
         # Re-run setup (if required)
         subprocess.run('sudo python3 setup.py', shell=True)
