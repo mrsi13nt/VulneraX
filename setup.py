@@ -64,32 +64,51 @@ desktop_template = f'''
 # Linux
 
 def linux():
-    subprocess.run('pip install -r requirements.txt',shell=True) # requirments
-    subprocess.run(f'mkdir -p {home_directory}/.VulneraX',shell=True)
-    subprocess.run(f'mv src {home_directory}/.VulneraX/',shell=True)
-    subprocess.run('sudo cp -r src /usr/bin/',shell=True)
-    subprocess.run(f'mv VulneraX.py {home_directory}/.VulneraX/',shell=True)
-    subprocess.run(f'sudo chmod +x {home_directory}/.VulneraX/VulneraX.py')
-    subprocess.run(f'sudo ln -sf {home_directory}/.VulneraX/VulneraX.py /usr/bin/VulneraX', shell=True, check=True)
-    detect_kalilinux_distro()
-    if os_info[-2] == 'kali':
-        check_and_install_tools(essential_tools, "Essential tools")
-        # the modified .desktop file
-        with open(desktop_file_path, 'w') as desktop_file:
-            desktop_file.write(desktop_template)
+    destination_directory = f"{home_directory}/.VulneraX"
+    try:
+        # If the destination directory exists, remove it
+        if os.path.exists(destination_directory):
+            print(f"Removing existing directory: {destination_directory}")
+            shutil.rmtree(destination_directory)
+        #subprocess.run('pip install -r requirements.txt',shell=True) # requirments
+        subprocess.run(f'mkdir -p {home_directory}/.VulneraX',shell=True)
+        print(f"Copying files from {current_directory} to {destination_directory}...")
+        # Copy files from current directory to the destination (this includes .git)
+        shutil.copytree(current_directory, destination_directory)
 
-        # set permission on the .desktop file
-        os.chmod(desktop_file_path, 0o755)
-        subprocess.run('sudo update-desktop-database', shell=True, check=True)
-        subprocess.run('rm -r *',shell=True)
-        sys.exit(1)
-    elif os_info[-2] == 'ubuntu':
-        check_and_install_tools(essential_tools, "Essential tools")
-        subprocess.run('rm -r *',shell=True)
-        sys.exit(1)
-    if os_info[-1] == 'arch':
-        subprocess.run('sudo pacman -S wireless_tools',shell=True)
+        # Set executable permissions on the main script
+        subprocess.run(['sudo', 'chmod', '+x', f'{destination_directory}/VulneraX.py'], check=True)
+        
+        # Create a symbolic link to run the tool from anywhere
+        subprocess.run(f'sudo ln -sf {destination_directory}/VulneraX.py /usr/bin/VulneraX', shell=True, check=True)
+        
+        # Detect the Linux distro and install necessary tools
+        detect_kalilinux_distro()
+        if os_info[-2] == 'kali':
+            check_and_install_tools(essential_tools, "Essential tools")
+            
+            # the modified .desktop file
+            with open(desktop_file_path, 'w') as desktop_file:
+                desktop_file.write(desktop_template)
 
+            # Set permission on the .desktop file
+            os.chmod(desktop_file_path, 0o755)
+            subprocess.run('sudo update-desktop-database', shell=True, check=True)
+            
+            # Clean up the current directory (if needed)
+            subprocess.run('rm -r *', shell=True)
+            sys.exit(1)
+
+        elif os_info[-2] == 'ubuntu':
+            check_and_install_tools(essential_tools, "Essential tools")
+            subprocess.run('rm -r *', shell=True)
+            sys.exit(1)
+        
+        if os_info[-1] == 'arch':
+            subprocess.run('sudo pacman -S wireless_tools', shell=True)
+
+    except Exception as e:
+        print(f"An error occurred during setup: {e}")
 # macOS
 
 def macOS():
