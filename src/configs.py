@@ -58,6 +58,7 @@ def get_local_commit():
             check=True,
             cwd=repo_path  # Use the repo path here
         )
+        
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         print(f"[\033[31m!\033[0m] Error getting local commit: {e}")
