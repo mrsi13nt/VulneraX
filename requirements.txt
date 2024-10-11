@@ -3,7 +3,6 @@ requests
 whois
 paramiko
 argparse
-threading
 lxml
 BeautifulSoup
 psutil
