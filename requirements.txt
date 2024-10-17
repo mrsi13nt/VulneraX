@@ -4,7 +4,7 @@ whois
 paramiko
 argparse
 lxml
-BeautifulSoup
+beautifulsoup4
 psutil
 bluepy
 winshell
