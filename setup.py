@@ -46,7 +46,7 @@ current_user = os.getlogin()
 current_directory = os.getcwd()
 # Get the current user's home directory
 home_directory = os.path.expanduser('~')
-desktop_directory = os.path.join(home_directory, '/usr/share/kali-menu/applications')
+desktop_directory = '/usr/share/kali-menu/applications'
 desktop_file_path = os.path.join(desktop_directory, 'VulneraX.desktop')
 os.makedirs(desktop_directory, exist_ok=True)
 
@@ -93,7 +93,8 @@ def linux():
         # Set permission on the .desktop file
         os.chmod(desktop_file_path, 0o755)
         subprocess.run('sudo update-desktop-database', shell=True, check=True)
-        if os_info[-2] == 'kali' or os_info[-1] == 'kali':
+        if len(os_info) >= 2 and (os_info[-2] == 'kali' or os_info[-1] == 'kali'):
+            printt('it\'s kali linux')
             check_and_install_tools(essential_tools, "Essential tools")
             
             # the modified .desktop file
@@ -105,7 +106,7 @@ def linux():
             subprocess.run('sudo update-desktop-database', shell=True, check=True)
             
             # Clean up the current directory (if needed)
-            subprocess.run('rm -r *', shell=True)
+            #subprocess.run('rm -r *', shell=True)
             sys.exit(1)
 
         elif os_info[-2] == 'ubuntu':
