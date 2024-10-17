@@ -98,22 +98,43 @@ def update_tool():
         if not os.path.exists(git_directory):
             print(f"[\033[31m!\033[0m] Error: '.git' directory not found in {destination_directory}.")
             return
-        
+
         # Change directory to the location of the tool
         os.chdir(destination_directory)
         print(f"[\033[32m+\033[0m] Changed to directory: {destination_directory}")
 
-        # Perform a git pull to get the latest updates
-        subprocess.run(["git", "pull"], check=True)
-        print(f"[\033[32m+\033[0m] Pulled the latest changes successfully.")
+        # Check for uncommitted changes
+        result = subprocess.run(['git', 'status', '--porcelain'], capture_output=True, text=True)
+        if result.stdout.strip():
+            print(f"[\033[31m!\033[0m] Uncommitted changes detected.")
+            user_choice = input(colored("Do you want to stash your changes before updating? (y/n): ", 'blue')).lower()
+            if user_choice == 'y':
+                # Stash changes before updating
+                subprocess.run(['git', 'stash'], check=True)
+                print(f"[\033[32m+\033[0m] Changes stashed.")
 
-        # Install/update requirements if any (replace this if not applicable)
+                # Perform a git pull to get the latest updates
+                subprocess.run(['git', 'pull'], check=True)
+                print(f"[\033[32m+\033[0m] Pulled the latest changes successfully.")
+
+                # Reapply stashed changes
+                subprocess.run(['git', 'stash', 'pop'], check=True)
+                print(f"[\033[32m+\033[0m] Reapplied your changes.")
+            else:
+                print(f"[\033[31m!\033[0m] Please commit or stash your changes before updating.")
+                return
+        else:
+            # No local changes, proceed with the update
+            subprocess.run(['git', 'pull'], check=True)
+            print(f"[\033[32m+\033[0m] Pulled the latest changes successfully.")
+
+        # Install/update requirements if any
         subprocess.run('pip install -r requirements.txt --break-system-packages', shell=True, check=True)
 
         # Re-run setup (if required)
         subprocess.run('sudo python3 setup.py', shell=True)
 
-        print("[\033[32m+\033[0m]  Update successful. Please restart the tool. ")
+        print("[\033[32m+\033[0m] Update successful. Please restart the tool.")
 
     except subprocess.CalledProcessError as e:
         print(f"[\033[31m!\033[0m] Error during update: {e}")
