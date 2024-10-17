@@ -61,12 +61,12 @@ os.makedirs(desktop_directory, exist_ok=True)
 # Template for the .desktop file
 desktop_template = f'''
     [Desktop Entry]
-    Name=VulneraX
-    Exec=bash -c "python3 {home_directory}/.VulneraX/VulneraX.py; bash -i"
-    Terminal=true
-    Icon={home_directory}/.VulneraX/src/img/logo.png
-    Type=Application
-    Categories=01-info-gathering;02-vulnerability-analysis;
+Name=VulneraX
+Exec=bash -c "python3 {home_directory}/.VulneraX/VulneraX.py; bash -i"
+Terminal=true
+Icon={home_directory}/.VulneraX/src/img/logo.png
+Type=Application
+Categories=01-info-gathering;02-vulnerability-analysis;
 '''
 
 # Linux
