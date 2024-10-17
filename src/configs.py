@@ -105,21 +105,31 @@ def update_tool():
 
         # Check for uncommitted changes
         result = subprocess.run(['git', 'status', '--porcelain'], capture_output=True, text=True)
-        if result.stdout.strip():
+        uncommitted_changes = result.stdout.strip()
+        
+        if uncommitted_changes:
             print(f"[\033[31m!\033[0m] Uncommitted changes detected.")
             user_choice = input(colored("Do you want to stash your changes before updating? (y/n): ", 'blue')).lower()
             if user_choice == 'y':
-                # Stash changes before updating
-                subprocess.run(['git', 'stash'], check=True)
-                print(f"[\033[32m+\033[0m] Changes stashed.")
+                # Attempt to stash changes
+                stash_result = subprocess.run(['git', 'stash'], capture_output=True, text=True)
+                if stash_result.returncode == 0:
+                    print(f"[\033[32m+\033[0m] Changes stashed.")
+                else:
+                    print(f"[\033[31m!\033[0m] Failed to stash changes: {stash_result.stderr.strip()}")
 
                 # Perform a git pull to get the latest updates
                 subprocess.run(['git', 'pull'], check=True)
                 print(f"[\033[32m+\033[0m] Pulled the latest changes successfully.")
 
-                # Reapply stashed changes
-                subprocess.run(['git', 'stash', 'pop'], check=True)
-                print(f"[\033[32m+\033[0m] Reapplied your changes.")
+                # Check if there are stashed changes to pop
+                stash_list_result = subprocess.run(['git', 'stash', 'list'], capture_output=True, text=True)
+                if stash_list_result.stdout.strip():
+                    # Reapply stashed changes
+                    subprocess.run(['git', 'stash', 'pop'], check=True)
+                    print(f"[\033[32m+\033[0m] Reapplied your changes.")
+                else:
+                    print(f"[\033[31m!\033[0m] No stash entries found. Nothing to pop.")
             else:
                 print(f"[\033[31m!\033[0m] Please commit or stash your changes before updating.")
                 return
