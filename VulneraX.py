@@ -4,6 +4,7 @@ import argparse
 import socket
 import os
 import sys
+import threading
 from src.info_gather import recon, scan
 from src.logo import logo, logo_main
 from src.osint import lookup_domain, lookup_ip, search_email, social_media
@@ -15,7 +16,6 @@ from src.wifi import wifi
 from src.bluetooth import blue
 from src.scanner import scanner_local, scanner_remote
 from src.tools import tools
-
 
 sys.dont_write_bytecode = True
 
@@ -84,6 +84,17 @@ def edit_config(args):
     if args.config:
         conf()
 
+# Function to run tasks concurrently
+def run_threaded_tasks(functions, args):
+    threads = []
+    for func in functions:
+        thread = threading.Thread(target=func, args=(args,))
+        thread.start()
+        threads.append(thread)
+    
+    for thread in threads:
+        thread.join()
+
 # Main function
 def main():
     parser = argparse.ArgumentParser(prog='VulneraX',
@@ -131,13 +142,12 @@ def main():
     wordlist_gen = parser.add_argument_group('Wordlist Generation')
     wordlist_gen.add_argument('-W', '--wordlist', action='store_true', help='Generate a custom wordlist')
 
-    #config
-    other = parser.add_argument_group('other')
-    other.add_argument('--config',action='store_true',dest='config',help='edit your config file')
+    # Config
+    other = parser.add_argument_group('Other')
+    other.add_argument('--config', action='store_true', dest='config', help='Edit your config file')
 
     # Parse arguments
     args = parser.parse_args()
-
 
     # Check if no arguments were provided
     if len(sys.argv) == 1:
@@ -156,36 +166,49 @@ def main():
     os.system('clear')
     print(logo_main)
 
+    # Prepare to run tasks in parallel
+    tasks = []
 
     # Information Gathering
     if args.port:
-        scan(args.port)
+        tasks.append(scan)
     if args.recon:
-        recon(args.recon)
+        tasks.append(recon)
 
     # OSINT
-    handle_osint(args)
+    if any([args.ip, args.email, args.social, args.domain]):
+        tasks.append(handle_osint)
 
     # Web Attacks
-    handle_web_scanning(args)
+    if args.url:
+        tasks.append(handle_web_scanning)
 
     # Wireless Pentesting
-    handle_wireless(args)
+    if args.wifi or args.bluetooth:
+        tasks.append(handle_wireless)
 
     # Vulnerability Assessment
-    handle_scanner(args)
+    if args.local or args.remote:
+        tasks.append(handle_scanner)
 
     # CTF Mode
-    handle_ctf(args)
+    if args.ctf:
+        tasks.append(handle_ctf)
 
     # Tool Installation
-    handle_tools(args)
+    if args.tools:
+        tasks.append(handle_tools)
 
     # Wordlist Generation
-    handle_wordlist(args)
+    if args.wordlist:
+        tasks.append(handle_wordlist)
 
     # Edit config file
-    edit_config(args)
+    if args.config:
+        tasks.append(edit_config)
+
+    # Run the selected tasks concurrently
+    run_threaded_tasks(tasks, args)
 
 if __name__ == '__main__':
     # Check for updates
