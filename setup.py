@@ -119,7 +119,7 @@ def linux():
 
         elif os_info[-2] == 'ubuntu':
             check_and_install_tools(essential_tools, "Essential tools")
-            subprocess.run('rm -r *', shell=True)
+            #subprocess.run('rm -r *', shell=True)
             sys.exit(1)
         
         if os_info[-1] == 'arch':
