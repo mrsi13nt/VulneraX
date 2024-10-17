@@ -150,6 +150,11 @@ def main():
     os.system('clear')
     print(logo_main)
 
+    # Check if no arguments were provided
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(1)
+
     # Information Gathering
     if args.port:
         scan(args.port)
