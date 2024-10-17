@@ -89,7 +89,6 @@ def linux():
         
         # Detect the Linux distro and install necessary tools
         detect_kalilinux_distro()
-        check_and_install_tools(essential_tools, "Essential tools")
             
         # the modified .desktop file
         with open(desktop_file_path, 'w') as desktop_file:
