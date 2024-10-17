@@ -52,18 +52,21 @@ current_directory = os.getcwd()
 # Get the current user's home directory
 home_directory = os.path.expanduser('~')
 desktop_directory = '/usr/share/kali-menu/applications'
+desktop_directory2 = f'{home_directory}/.local/share/applications/'
 desktop_file_path = os.path.join(desktop_directory, 'VulneraX.desktop')
+desktop_file_path2 = os.path.join(desktop_directory, 'VulneraX.desktop')
 os.makedirs(desktop_directory, exist_ok=True)
+os.makedirs(desktop_directory2, exist_ok=True)
 
 # Template for the .desktop file
 desktop_template = f'''
     [Desktop Entry]
-Name=VulneraX
-Exec=bash -c "python3 {home_directory}/.VulneraX/VulneraX.py; bash -i"
-Terminal=true
-Icon={home_directory}/.VulneraX/src/img/logo.png
-Type=Application
-Categories=01-info-gathering;02-vulnerability-analysis;
+    Name=VulneraX
+    Exec=bash -c "python3 {home_directory}/.VulneraX/VulneraX.py; bash -i"
+    Terminal=true
+    Icon={home_directory}/.VulneraX/src/img/logo.png
+    Type=Application
+    Categories=01-info-gathering;02-vulnerability-analysis;
 '''
 
 # Linux
@@ -96,6 +99,13 @@ def linux():
 
         # Set permission on the .desktop file
         os.chmod(desktop_file_path, 0o755)
+
+        # the modified .desktop file
+        with open(desktop_file_path2, 'w') as desktop_file:
+            desktop_file.write(desktop_template)
+
+        # Set permission on the .desktop file
+        os.chmod(desktop_file_path2, 0o755)
         subprocess.run('sudo update-desktop-database', shell=True, check=True)
         if len(os_info) >= 2 and (os_info[-2] == 'kali' or os_info[-1] == 'kali'):
             printt('it\'s kali linux')
