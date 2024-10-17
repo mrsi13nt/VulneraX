@@ -4,12 +4,9 @@ import subprocess
 import platform
 import shutil
 import colorama
-from termcolor import colored
 import time
 
 
-# Initialize colorama for cross-platform colored output
-colorama.init()
 
 def printt(text, delay=0.05):
     """Simulate a typing effect for the given text."""
@@ -38,7 +35,7 @@ def install_tool(tool_name):
 
 def check_and_install_tools(tools, category):
     """Check and install tools from a given list."""
-    print(colored(f"{category} checking...",'cyan'))
+    print(f"/033[1;32;40m {category} checking...")
     if check_tool(tools):
         print(f"{tools} .... \033[32mOK\033[0m")
     else:
