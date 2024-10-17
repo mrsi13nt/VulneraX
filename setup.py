@@ -66,7 +66,7 @@ desktop_template = f'''
     Terminal=true
     Icon={home_directory}/.VulneraX/src/img/logo.png
     Type=Application
-    Categories=01-info-gathering;01-04-network-scanners;02-vulnerability-analysis;
+    Categories=01-info-gathering;02-vulnerability-analysis;
 '''
 
 # Linux
