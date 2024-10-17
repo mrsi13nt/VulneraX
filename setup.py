@@ -3,13 +3,21 @@ import sys
 import subprocess
 import platform
 import shutil
-from src.configs import printt
 import colorama
 from termcolor import colored
+import time
 
 
 # Initialize colorama for cross-platform colored output
 colorama.init()
+
+def printt(text, delay=0.05):
+    """Simulate a typing effect for the given text."""
+    for char in text:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(delay)
+    print()  # Move to the next line after the text is typed
 
 
 essential_tools = "aircrack-ng"
