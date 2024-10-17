@@ -8,4 +8,3 @@ beautifulsoup4
 psutil
 bluepy
 winshell
-threading

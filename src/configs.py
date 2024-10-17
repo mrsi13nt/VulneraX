@@ -138,8 +138,17 @@ def update_tool():
             subprocess.run(['git', 'pull'], check=True)
             print(f"[\033[32m+\033[0m] Pulled the latest changes successfully.")
 
-        # Install/update requirements if any
-        subprocess.run('pip install -r requirements.txt --break-system-packages', shell=True, check=True)
+        # After pulling changes and before installing requirements
+        print("[*] Contents of requirements.txt:")
+        with open("requirements.txt", "r") as req_file:
+            print(req_file.read())
+
+        # Now install the requirements
+        try:
+            subprocess.run('pip install -r requirements.txt --break-system-packages', shell=True, check=True)
+            print("[\033[32m+\033[0m] Requirements installed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"[\033[31m!\033[0m] Error during installation: {e}")
 
         # Re-run setup (if required)
         subprocess.run('sudo python3 setup.py', shell=True)
