@@ -8,6 +8,7 @@ import time
 
 
 
+
 def printt(text, delay=0.05):
     """Simulate a typing effect for the given text."""
     for char in text:
